@@ -1,53 +1,46 @@
-const checkLengthString = (string, length) => {
-  const result = string.length <= length;
-  return result;
-};
+const checkLengthString = (string = '', length = 1) => string.length <= length;
 
-checkLengthString();
+checkLengthString('Что-нибудь', 10);
+checkLengthString('томат', 5);
+checkLengthString('томат', 3);
 
-const getCheckString = (string) => {
+const isPalindrome = (string = '') => {
   let newString = string.replaceAll(' ', '');
-  newString = string.toUpperCase();
+  newString = newString.toUpperCase();
 
-  let emptyString;
+  let emptyString = '';
 
   for(let i = newString.length - 1; i >= 0; i --){
-    newString.at(i);
     emptyString += newString.at(i);
   }
 
-  const result = emptyString === newString;
-  return result;
+  return emptyString === newString;
 };
 
-getCheckString();
+isPalindrome('топот');
+isPalindrome('ДовОд');
+isPalindrome('Кекс');
+isPalindrome('Лёша на полке клопа нашёл ');
 
-//console.log('1. Ожидаю true, получаю - ', getCheckString('топот'));// Строка является палиндромом
-//console.log('2. Ожидаю true, получаю - ', getCheckString('ДовОд'));// Несмотря на разный регистр, тоже палиндром
-//console.log('3. Ожидаю false, получаю - ', getCheckString('Кекс'));// Это не палиндром
-//console.log('4. Ожидаю true, получаю - ', getCheckString('Лёша на полке клопа нашёл '));// Это палиндром*/
+const getNumber = (string = '') => {
+  let result = '';
 
-const getNumber = (string) => {
-  let result;
+  string = string.toString();
 
   for(let i = 0; i <= string.length - 1; i ++){
-    parseInt(i, 10);
-    if (Number.isNaN(i * 10)) {
-      result += [i];
+    if (Number.isNaN(parseInt(string[i], 10)) === false) {
+      result += string[i];
     }
   }
 
-  return result;
+  return result === '' ? NaN : Number(result);
 };
 
-getNumber();
-
-//console.log('1. Ожидаю 2023, получаю - ', getNumber('2023 год'));
-//console.log('1. Ожидаю 2022, получаю - ', getNumber('ECMAScript 2022'));
-//console.log('1. Ожидаю 105, получаю - ', getNumber('1 кефир, 0.5 батона'));
-//console.log('1. Ожидаю 7, получаю - ', getNumber('агент 007'));
-//console.log('1. Ожидаю NaN, получаю - ', getNumber('а я томат'));
-
-//console.log('1. Ожидаю 2023, получаю - ', getNumber(2023));
-//console.log('1. Ожидаю 1, получаю - ', getNumber(-1));
-//console.log('1. Ожидаю 15, получаю - ', getNumber(1.5));
+getNumber('2023 год');
+getNumber('ECMAScript 2022');
+getNumber('1 кефир, 0.5 батона');
+getNumber('агент 007');
+getNumber('а я томат');
+getNumber(2023);
+getNumber(-1);
+getNumber(1.5);
