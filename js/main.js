@@ -57,9 +57,7 @@ function createRandomIdFromRangeGenerator (min, max) {
   return function () {
     let currentValue = getRandomInteger(min, max);
     if (previousValues.length >= (max - min + 1)) {
-      //линтер ругается на консоль. Подскажи, пжл, чем его можно заменить
-      console.error(`Перебраны все числа из диапазона от ${ min } до ${ max}`);
-      return null;
+      throw new Error(`Перебраны все числа из диапазона от ${ min } до ${ max}`);
     }
     while (previousValues.includes(currentValue)) {
       currentValue = getRandomInteger(min, max);
@@ -71,38 +69,36 @@ function createRandomIdFromRangeGenerator (min, max) {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const createComments = () => {
-  const randomIdCommentsIndex = createRandomIdFromRangeGenerator(1, 30);
-  const randomAvatarIndex = getRandomInteger(1, 6);
-  const randomMessageIndex = getRandomInteger(1, 2);
+const getRandomIdCommentsIndex = createRandomIdFromRangeGenerator(1, 30);
+//const randomAvatarIndex = getRandomInteger(1, 6);
+//const randomMessageIndex = getRandomInteger(1, 2);
 
-  return {
-    id: randomIdCommentsIndex,
-    avatar: `img/avatar-${ randomAvatarIndex }.svg`,
-    message: (randomMessageIndex, getRandomArrayElement(MESSAGE)),
-    name:getRandomArrayElement(NAME),
-  };
-};
+const createComments = () => ({
+  id: getRandomIdCommentsIndex (),
+  avatar: `img/avatar-${ (getRandomInteger(1, 6)) }.svg`,
+  //message: ((randomMessageIndex), getRandomArrayElement(MESSAGE)),
+  message: ((getRandomInteger(1, 2)), getRandomArrayElement(MESSAGE)),
+  name:getRandomArrayElement(NAME),
+});
 
 createComments();
-//console.log(createComments());
+console.log(createComments());
+
+const getRandomIdIndex = createRandomIdFromRangeGenerator(1, 25);
+const getRandomUrlIndex = createRandomIdFromRangeGenerator(1, 25);
 
 const createPhotoPost = () => {
-  const randomIdIndex = createRandomIdFromRangeGenerator(1, 25);
-  const randomUrlIndex = createRandomIdFromRangeGenerator(1, 25);
-  const randomLikesIndex = getRandomInteger(15, 200);
   const randomCommentsIndex = getRandomInteger(0, 30);
 
   return {
-    id: randomIdIndex,
-    url: `photos/${ randomUrlIndex }.jpg`,
+    id: getRandomIdIndex(),
+    url: `photos/${ getRandomUrlIndex() }.jpg`,
     description: getRandomArrayElement(DESCRIPTION),
-    likes: randomLikesIndex,
-    comments: randomCommentsIndex,
+    likes: getRandomInteger(15, 200),
+    comments: Array.from({length: randomCommentsIndex}, createComments),
   };
 };
 
-const photoPosts = Array.from({length: 2}, createPhotoPost);
-photoPosts();
+const photoPosts = Array.from({length: 25}, createPhotoPost);
 
-//console.log(photoPosts);
+console.log(photoPosts);
