@@ -1,3 +1,4 @@
+/*
 const checkLengthString = (string = '', length = 1) => string.length <= length;
 
 checkLengthString('Что-нибудь', 10);
@@ -44,3 +45,26 @@ getNumber('а я томат');
 getNumber(2023);
 getNumber(-1);
 getNumber(1.5);
+*/
+
+//ДЗ 5.16. Функции возвращаются
+
+const convertHoursToMinutes = (time) => {
+  const minutes = time.split(':').map(Number);
+  const timeInMinutes = minutes[0] * 60 + minutes[1];
+  return timeInMinutes;
+};
+
+const getWorkDay = (workStart, workEnd, meetingStart, meetingDuration) => {
+  workStart = convertHoursToMinutes(workStart);
+  workEnd = convertHoursToMinutes(workEnd);
+  meetingStart = convertHoursToMinutes(meetingStart);
+
+  return workStart <= meetingStart && meetingStart + meetingDuration <= workEnd;
+};
+
+getWorkDay('08:00', '17:30', '14:00', 90);
+getWorkDay('8:0', '10:0', '8:0', 120);
+getWorkDay('08:00', '14:30', '14:00', 90);
+getWorkDay('14:00', '17:30', '08:0', 90);
+getWorkDay('8:00', '17:30', '08:00', 900);
