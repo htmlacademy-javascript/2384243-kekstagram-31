@@ -32,6 +32,8 @@ const NAME = [
   'Аполлон',
 ];
 
+const AMOUNT_POSTS = 25;
+
 const getRandomIdCommentsIndex = createRandomIdFromRangeGenerator(1, 30 * 25);
 const getRandomIdIndex = createRandomIdFromRangeGenerator(1, 25);
 const getRandomUrlIndex = createRandomIdFromRangeGenerator(1, 25);
@@ -52,5 +54,5 @@ const createPhotoPost = () => ({
   comments: Array.from({length: getRandomInteger(0, 30)}, createComments),
 });
 
-const createPosts = () => Array.from({length: 25}, createPhotoPost);
+const createPosts = () => Array.from({length: AMOUNT_POSTS}, createPhotoPost);
 export {createPosts};

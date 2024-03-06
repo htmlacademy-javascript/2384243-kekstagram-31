@@ -50,8 +50,8 @@ getNumber(1.5);
 //ДЗ 5.16. Функции возвращаются
 
 const convertHoursToMinutes = (time) => {
-  const minutes = time.split(':').map(Number);
-  const timeInMinutes = minutes[0] * 60 + minutes[1];
+  const [hours, minutes] = time.split(':').map(Number);
+  const timeInMinutes = hours * 60 + minutes;
   return timeInMinutes;
 };
 
