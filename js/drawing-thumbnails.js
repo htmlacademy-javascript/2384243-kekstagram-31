@@ -23,7 +23,7 @@ usersPictures.forEach(({url, description, likes, comments}) => {
   userPicture.querySelector('.picture__img').src = url;
   userPicture.querySelector('.picture__img').alt = description;
   userPicture.querySelector('.picture__likes').textContent = likes;
-  userPicture.querySelector('.picture__comments').textContent = comments;
+  userPicture.querySelector('.picture__comments').textContent = comments.length;
   //отрисовываем фотографию в контейнере
   usersPicturesFragment.appendChild(userPicture);
 });
