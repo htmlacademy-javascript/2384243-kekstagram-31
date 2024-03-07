@@ -1,6 +1,7 @@
 import './data.js';
 import './util.js';
+import './drawing-thumbnails.js';
 
-import {createPosts} from './data.js';
+//import {createPosts} from './data.js';
 
-console.log(createPosts());
+//createPosts();
