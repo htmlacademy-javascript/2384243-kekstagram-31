@@ -13,10 +13,12 @@ const usersPicturesFragment = document.createDocumentFragment();
 
 //массив фотографий
 const usersPictures = createPosts();
+
 //перебираем фотографии
 usersPictures.forEach(({url, description, likes, comments, id}) => {
   //клонируем шаблон
   const userPicture = templateUserPicture.cloneNode(true);
+
   //вставляем данные в шаблон
   userPicture.querySelector('.picture__img').src = url;
   userPicture.querySelector('.picture__img').alt = description;
@@ -38,5 +40,7 @@ usersPictures.forEach(({url, description, likes, comments, id}) => {
 
 // И только в конце отрисовываем всё из "коробочки"
 containerUsersPictures.appendChild(usersPicturesFragment);
+
+export {containerUsersPictures, usersPictures};
 
 //console.log(containerUsersPictures);

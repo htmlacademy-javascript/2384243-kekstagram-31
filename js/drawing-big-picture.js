@@ -51,6 +51,7 @@ function openBigPicture (currentPicture) {
   bigPictureElement.querySelector('.social__comments').appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
 
   document.addEventListener('keydown', onPictureEscKeydown);
+
   // После открытия окна спрячьте блоки счётчика комментариев .social__comment-count, добавив класс hidden
   const commentsCount = bigPictureElement.querySelector('.social__comment-count');
   commentsCount.classList.add('hidden');
