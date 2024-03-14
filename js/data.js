@@ -43,7 +43,6 @@ const createComments = () => ({
   avatar: `img/avatar-${ (getRandomInteger(1, 6)) }.svg`,
   message: ((getRandomInteger(1, 2)), getRandomArrayElement(MESSAGE)),
   name:getRandomArrayElement(NAME),
-
 });
 
 const createPhotoPost = () => ({
