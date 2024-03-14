@@ -2,7 +2,7 @@ import {isEscapeKey} from './util.js';
 
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = bigPictureElement.querySelector('.big-picture__cancel');
-const body = bigPictureElement.querySelector('.social__comment-count');
+const body = document.body;
 
 const onPictureEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -48,6 +48,7 @@ function openBigPicture (currentPicture) {
   bigPictureElement.querySelector('.likes-count').textContent = currentPicture.likes; // * Количество лайков likes подставьте как текстовое содержание элемента .likes-count.
   bigPictureElement.querySelector('.social__comment-shown-count').textContent = currentPicture.comments.length; // * Количество показанных комментариев подставьте как текстовое содержание элемента .social__comment-shown-count.
   bigPictureElement.querySelector('.social__comment-total-count').textContent = currentPicture.comments.length; // * Общее количество комментариев к фотографии comments подставьте как текстовое содержание элемента .social__comment-total-count.
+  bigPictureElement.querySelector('.social__comments').innerHTML = '';
   bigPictureElement.querySelector('.social__comments').appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
 
   document.addEventListener('keydown', onPictureEscKeydown);
