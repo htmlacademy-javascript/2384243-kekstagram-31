@@ -54,40 +54,40 @@ function openBigPicture (currentPicture) {
   bigPictureImg.src = currentPicture.url;// * Адрес изображения url подставьте как src изображения внутри блока .big-picture__img.
   bigPictureDescription.textContent = currentPicture.description; // * Описание фотографии description вставьте строкой в блок .social__caption.
   bigPictureLikes.textContent = currentPicture.likes; // * Количество лайков likes подставьте как текстовое содержание элемента .likes-count.
-  bigPictureCommentShownCount.textContent = currentPicture.comments.length; // * Количество показанных комментариев подставьте как текстовое содержание элемента .social__comment-shown-count.
+  let commentShownCount = 5;
+  bigPictureCommentShownCount.textContent = commentShownCount > currentPicture.comments.length ? currentPicture.comments.length : commentShownCount; // * Количество показанных комментариев подставьте как текстовое содержание элемента .social__comment-shown-count.
   bigPictureCommentTotalCount.textContent = currentPicture.comments.length; // * Общее количество комментариев к фотографии comments подставьте как текстовое содержание элемента .social__comment-total-count.
 
-  // function openBigPictureComments (shownComments) {
   bigPictureSocialComments.innerHTML = '';
-  bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments));
+  bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
+
+  if (commentShownCount >= currentPicture.comments.length) {
+    commentsLoader.classList.add('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+
+  function openComments () {
+    commentShownCount += 5;//увеличиваем комменты на 5
+
+    currentPicture.comments.slice(commentShownCount, commentShownCount += 5); //вырезаем часть комментов
+    //отрисовываем комменты
+    bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += 5)));
+    //Меняем число/счетчик открытых комментов
+    bigPictureCommentShownCount.textContent = commentShownCount > currentPicture.comments.length ? currentPicture.comments.length : commentShownCount;
+  }
 
   commentsLoader.addEventListener('click', (evt) => {
     evt.preventDefault();
 
-    let shownComments = 5;
-    if (shownComments >= currentPicture.comments.length) {
-      commentsLoader.classList.add('hidden');
-    } else {
-      commentsLoader.classList.remove('hidden');
-      shownComments += 5;
-    }
-    bigPictureCommentShownCount.textContent = shownComments > currentPicture.comments.length ? currentPicture.comments.length : shownComments;
+    openComments();
   });
 
   // commentsLoader.removeEventListener('click', (evt) => {
   //   evt.preventDefault();
   // });
 
-
-  //bigPictureElement.querySelector('.social__comments').appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
-
   document.addEventListener('keydown', onPictureEscKeydown);
-
-  // После открытия окна спрячьте блоки счётчика комментариев .social__comment-count, добавив класс hidden
-  //const commentsCount = bigPictureElement.querySelector('.social__comment-count');
-  //commentsCount.classList.add('hidden');
-  // После открытия окна спрячьте блок загрузки новых комментариев .comments-loader, добавив класс hidden
-  //commentsLoader.classList.add('hidden');
 
   body.classList.add('modal-open');// добавьте тегу <body> класс modal-open,чтобы контейнер с фотографиями позади не прокручивался при скролле
 }
