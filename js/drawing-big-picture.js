@@ -8,10 +8,13 @@ const bigPictureLikes = bigPictureElement.querySelector('.likes-count');
 const bigPictureCommentShownCount = bigPictureElement.querySelector('.social__comment-shown-count');
 const bigPictureCommentTotalCount = bigPictureElement.querySelector('.social__comment-total-count');
 const bigPictureSocialComments = bigPictureElement.querySelector('.social__comments');
-
-const body = document.body;
 const commentsLoader = bigPictureElement.querySelector('.comments-loader'); //кнопка «Загрузить ещё»
+const body = document.body;
 
+let commentShownCount = 0; //счетчик
+let currentPicture = null; //текущее фото
+
+//Закрываем окно esc
 const onPictureEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -37,58 +40,52 @@ const createCommentTemplate = (({avatar, name, message}) => {
   return comment;
 });
 
+//Создаем фрагмент с комментариями (по шаблону)
 const createCommentsFragment = (comments) => {
   //создаем "коробочку" для комментов
   const commentsFragment = document.createDocumentFragment();
 
   //перебираем массив с комментариями, каждый коммент создаем по шаблону и помещаем в созданную "коробочку" для комментов
   comments.forEach((comment) => commentsFragment.appendChild(createCommentTemplate(comment)));
-  //возвращаем "коробку" с комментами
+
   return commentsFragment;
 };
 
-//Функция для открытия окна/большой фотографии
-function openBigPicture (currentPicture) {
-  bigPictureElement.classList.remove('hidden');//Для отображения окна удаляем класс hidden у элемента .big-picture
+//Открываем комментарии
+function openComments () {
 
-  bigPictureImg.src = currentPicture.url;// * Адрес изображения url подставьте как src изображения внутри блока .big-picture__img.
-  bigPictureDescription.textContent = currentPicture.description; // * Описание фотографии description вставьте строкой в блок .social__caption.
-  bigPictureLikes.textContent = currentPicture.likes; // * Количество лайков likes подставьте как текстовое содержание элемента .likes-count.
-  let commentShownCount = 5;
-  bigPictureCommentShownCount.textContent = commentShownCount > currentPicture.comments.length ? currentPicture.comments.length : commentShownCount; // * Количество показанных комментариев подставьте как текстовое содержание элемента .social__comment-shown-count.
-  bigPictureCommentTotalCount.textContent = currentPicture.comments.length; // * Общее количество комментариев к фотографии comments подставьте как текстовое содержание элемента .social__comment-total-count.
+  //количество открытых комментариев .social__comment-shown-count.
+  const commentsCount = commentShownCount > currentPicture.comments.length ? commentShownCount : currentPicture.comments.length;
+  bigPictureCommentShownCount.textContent = commentsCount;
 
-  bigPictureSocialComments.innerHTML = '';
-  bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
+  //отрисовываем комменты, увеличивая при каждом клике на 5
+  bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += 5)));
 
   if (commentShownCount >= currentPicture.comments.length) {
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
   }
+}
 
-  function openComments () {
-    commentShownCount += 5;//увеличиваем комменты на 5
+//Функция для открытия большой фотографии
+function openBigPicture (bigPicture) {
+  bigPictureElement.classList.remove('hidden');//Для отображения окна удаляем класс hidden у элемента .big-picture
 
-    currentPicture.comments.slice(commentShownCount, commentShownCount += 5); //вырезаем часть комментов
-    //отрисовываем комменты
-    bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += 5)));
-    //Меняем число/счетчик открытых комментов
-    bigPictureCommentShownCount.textContent = commentShownCount > currentPicture.comments.length ? currentPicture.comments.length : commentShownCount;
-  }
+  //присваиваем данные фотографии
+  currentPicture = bigPicture;
+  commentShownCount = 0;
+  bigPictureImg.src = bigPicture.url;// * Адрес изображения url,.big-picture__img.
+  bigPictureDescription.textContent = bigPicture.description; // * Описание фотографии description, .social__caption.
+  bigPictureLikes.textContent = bigPicture.likes; // * Количество лайков likes, .likes-count.
+  bigPictureCommentTotalCount.textContent = currentPicture.comments.length; //Общее количество комментариев .social__comment-total-count.
 
-  commentsLoader.addEventListener('click', (evt) => {
-    evt.preventDefault();
+  bigPictureSocialComments.innerHTML = '';// * очищаем список комментариев под фотографией
 
-    openComments();
-  });
+  openComments();
 
-  // commentsLoader.removeEventListener('click', (evt) => {
-  //   evt.preventDefault();
-  // });
-
+  commentsLoader.addEventListener('click', openComments);
   document.addEventListener('keydown', onPictureEscKeydown);
-
   body.classList.add('modal-open');// добавьте тегу <body> класс modal-open,чтобы контейнер с фотографиями позади не прокручивался при скролле
 }
 
@@ -97,8 +94,8 @@ function closeBigPicture () {
   bigPictureElement.classList.add('hidden');
 
   document.removeEventListener('keydown', onPictureEscKeydown);
-
-  body.classList.remove('modal-open'); //При закрытии окна - удалить этот класс.
+  commentsLoader.removeEventListener('click', openComments);
+  body.classList.remove('modal-open');
 }
 
 bigPictureCloseElement.addEventListener('click', () => {
@@ -106,10 +103,3 @@ bigPictureCloseElement.addEventListener('click', () => {
 });
 
 export {openBigPicture};
-
-// кнопка «Загрузить ещё» - загрузки с сервера быть не должно не происходит. Просто показываются следующие 5 комментариев из списка.
-//Сразу после открытия изображения в полноэкранном режиме отображается не более 5 комментариев
-// следующие 5 элементов добавлялись бы по нажатию на кнопку «Загрузить ещё»/Отображение дополнительных комментариев происходит при нажатии на кнопку .comments-loader
-//При нажатии на кнопку отображается не более 5 новых комментариев
-//При изменении количества показанных комментариев число показанных комментариев в блоке .social__comment-count также изменяется
-//Если все комментарии показаны, кнопку .comments-loader следует скрыть, добавив класс hidden
