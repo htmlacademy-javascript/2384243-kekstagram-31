@@ -29,7 +29,7 @@ usersPictures.forEach(({url, description, likes, comments, id}) => {
   //складываем фотографии в "коробку"
   usersPicturesFragment.appendChild(userPicture);
 
-  userPicture.addEventListener('click', (evt) => { // 1. Большое фото открывается при клике на миниатюру
+  userPicture.addEventListener('click', (evt) => { //Большое фото открывается при клике на миниатюру
     evt.preventDefault();
 
     //текущее фото = в массиве фотографий ищем фото, id которого равно id, по которому произошел клик
@@ -42,5 +42,3 @@ usersPictures.forEach(({url, description, likes, comments, id}) => {
 containerUsersPictures.appendChild(usersPicturesFragment);
 
 export {containerUsersPictures, usersPictures};
-
-//console.log(containerUsersPictures);

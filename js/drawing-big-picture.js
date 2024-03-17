@@ -54,12 +54,11 @@ const createCommentsFragment = (comments) => {
 //Открываем комментарии
 function openComments () {
 
-  //количество открытых комментариев .social__comment-shown-count.
-  const commentsCount = commentShownCount > currentPicture.comments.length ? commentShownCount : currentPicture.comments.length;
-  bigPictureCommentShownCount.textContent = commentsCount;
-
   //отрисовываем комменты, увеличивая при каждом клике на 5
   bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += 5)));
+  //количество открытых комментариев .social__comment-shown-count.
+  const commentsCount = commentShownCount < currentPicture.comments.length ? commentShownCount : currentPicture.comments.length;
+  bigPictureCommentShownCount.textContent = commentsCount;
 
   if (commentShownCount >= currentPicture.comments.length) {
     commentsLoader.classList.add('hidden');
@@ -89,7 +88,6 @@ function openBigPicture (bigPicture) {
   body.classList.add('modal-open');// добавьте тегу <body> класс modal-open,чтобы контейнер с фотографиями позади не прокручивался при скролле
 }
 
-//6.Напишите код для закрытия окна по нажатию клавиши Esc и клике по иконке закрытия.
 function closeBigPicture () {
   bigPictureElement.classList.add('hidden');
 
