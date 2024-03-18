@@ -28,19 +28,19 @@ usersPictures.forEach(({url, description, likes, comments, id}) => {
 
   //складываем фотографии в "коробку"
   usersPicturesFragment.appendChild(userPicture);
-
-  userPicture.addEventListener('click', (evt) => { // 1. Большое фото открывается при клике на миниатюру
-    evt.preventDefault();
-
-    //текущее фото = в массиве фотографий ищем фото, id которого равно id, по которому произошел клик
-    const currentPicture = usersPictures.find((picture) => evt.currentTarget.dataset.id === picture.id.toString());
-    openBigPicture(currentPicture);
-  });
 });
 
 // И только в конце отрисовываем всё из "коробочки"
 containerUsersPictures.appendChild(usersPicturesFragment);
 
-export {containerUsersPictures, usersPictures};
+containerUsersPictures.addEventListener('click', (evt) => { //Большое фото открывается при клике на миниатюру
+  const picture = evt.target.closest('.picture');
 
-//console.log(containerUsersPictures);
+  if(picture){
+    evt.preventDefault();
+    //в массиве фотографий находим элемент/фото, id которого равно id, по которому произошел клик
+    const currentPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
+
+    openBigPicture(currentPicture);
+  }
+});

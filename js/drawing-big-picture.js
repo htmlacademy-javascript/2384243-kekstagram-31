@@ -2,8 +2,19 @@ import {isEscapeKey} from './util.js';
 
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureCloseElement = bigPictureElement.querySelector('.big-picture__cancel');
+const bigPictureImg = bigPictureElement.querySelector('.big-picture__img img');
+const bigPictureDescription = bigPictureElement.querySelector('.social__caption');
+const bigPictureLikes = bigPictureElement.querySelector('.likes-count');
+const bigPictureCommentShownCount = bigPictureElement.querySelector('.social__comment-shown-count');
+const bigPictureCommentTotalCount = bigPictureElement.querySelector('.social__comment-total-count');
+const bigPictureSocialComments = bigPictureElement.querySelector('.social__comments');
+const commentsLoader = bigPictureElement.querySelector('.comments-loader'); //кнопка «Загрузить ещё»
 const body = document.body;
 
+let commentShownCount = 0; //счетчик
+let currentPicture = null; //текущее фото
+
+//Закрываем окно esc
 const onPictureEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -29,47 +40,60 @@ const createCommentTemplate = (({avatar, name, message}) => {
   return comment;
 });
 
+//Создаем фрагмент с комментариями (по шаблону)
 const createCommentsFragment = (comments) => {
   //создаем "коробочку" для комментов
   const commentsFragment = document.createDocumentFragment();
 
   //перебираем массив с комментариями, каждый коммент создаем по шаблону и помещаем в созданную "коробочку" для комментов
   comments.forEach((comment) => commentsFragment.appendChild(createCommentTemplate(comment)));
-  //возвращаем "коробку" с комментами
+
   return commentsFragment;
 };
 
-//Функция для открытия окна/большой фотографии
-function openBigPicture (currentPicture) {
+//Открываем комментарии
+function openComments () {
+
+  //отрисовываем комменты, увеличивая при каждом клике на 5
+  bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += 5)));
+  //количество открытых комментариев .social__comment-shown-count.
+  const commentsCount = commentShownCount < currentPicture.comments.length ? commentShownCount : currentPicture.comments.length;
+  bigPictureCommentShownCount.textContent = commentsCount;
+
+  if (commentShownCount >= currentPicture.comments.length) {
+    commentsLoader.classList.add('hidden');
+  } else {
+    commentsLoader.classList.remove('hidden');
+  }
+}
+
+//Функция для открытия большой фотографии
+function openBigPicture (bigPicture) {
   bigPictureElement.classList.remove('hidden');//Для отображения окна удаляем класс hidden у элемента .big-picture
 
-  bigPictureElement.querySelector('.big-picture__img img').src = currentPicture.url;// * Адрес изображения url подставьте как src изображения внутри блока .big-picture__img.
-  bigPictureElement.querySelector('.social__caption').textContent = currentPicture.description; // * Описание фотографии description вставьте строкой в блок .social__caption.
-  bigPictureElement.querySelector('.likes-count').textContent = currentPicture.likes; // * Количество лайков likes подставьте как текстовое содержание элемента .likes-count.
-  bigPictureElement.querySelector('.social__comment-shown-count').textContent = currentPicture.comments.length; // * Количество показанных комментариев подставьте как текстовое содержание элемента .social__comment-shown-count.
-  bigPictureElement.querySelector('.social__comment-total-count').textContent = currentPicture.comments.length; // * Общее количество комментариев к фотографии comments подставьте как текстовое содержание элемента .social__comment-total-count.
-  bigPictureElement.querySelector('.social__comments').innerHTML = '';
-  bigPictureElement.querySelector('.social__comments').appendChild(createCommentsFragment(currentPicture.comments));// * Список комментариев под фотографией: комментарии должны вставляться в блок .social__comments.
+  //присваиваем данные фотографии
+  currentPicture = bigPicture;
+  commentShownCount = 0;
+  bigPictureImg.src = bigPicture.url;// * Адрес изображения url,.big-picture__img.
+  bigPictureDescription.textContent = bigPicture.description; // * Описание фотографии description, .social__caption.
+  bigPictureLikes.textContent = bigPicture.likes; // * Количество лайков likes, .likes-count.
+  bigPictureCommentTotalCount.textContent = currentPicture.comments.length; //Общее количество комментариев .social__comment-total-count.
 
+  bigPictureSocialComments.innerHTML = '';// * очищаем список комментариев под фотографией
+
+  openComments();
+
+  commentsLoader.addEventListener('click', openComments);
   document.addEventListener('keydown', onPictureEscKeydown);
-
-  // После открытия окна спрячьте блоки счётчика комментариев .social__comment-count, добавив класс hidden
-  const commentsCount = bigPictureElement.querySelector('.social__comment-count');
-  commentsCount.classList.add('hidden');
-  // После открытия окна спрячьте блок загрузки новых комментариев .comments-loader, добавив класс hidden
-  const commentsLoader = bigPictureElement.querySelector('.comments-loader');
-  commentsLoader.classList.add('hidden');
-
   body.classList.add('modal-open');// добавьте тегу <body> класс modal-open,чтобы контейнер с фотографиями позади не прокручивался при скролле
 }
 
-//6.Напишите код для закрытия окна по нажатию клавиши Esc и клике по иконке закрытия.
 function closeBigPicture () {
   bigPictureElement.classList.add('hidden');
 
   document.removeEventListener('keydown', onPictureEscKeydown);
-
-  body.classList.remove('modal-open'); //При закрытии окна - удалить этот класс.
+  commentsLoader.removeEventListener('click', openComments);
+  body.classList.remove('modal-open');
 }
 
 bigPictureCloseElement.addEventListener('click', () => {
