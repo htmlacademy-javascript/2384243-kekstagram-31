@@ -13,17 +13,17 @@ const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent:'img-upload__field-wrapper',
   errorTextTag: 'div',
-  errorTextClass:'.img-upload__field-wrapper--error',
+  errorTextClass:'img-upload__field-wrapper--error',
 });
 
-//функция проверки
+//функция проверки хэштега
 function validateHashtag (value) {
   if (!value){
     return true;
   }
 
   const hashtags = value.toLowerCase().split(' '); //создаем массив с пробелами
-  if (hashtags.length > 5) {
+  if (hashtags.length > 6) {
     hashtagErrorMessage = 'превышено количество хэштегов';
     return false;
   }
@@ -35,7 +35,8 @@ function validateHashtag (value) {
     return false;
   }
 
-  hashtags.forEach((hashtag) => {
+  //метод .every проверяет удовлетворяют ли все элементы в массиве условиям в функции-колбэке
+  return hashtags.every((hashtag) => {
 
     if(!hashtag.startsWith('#')) {
       hashtagErrorMessage = 'введён невалидный хэштег';
@@ -67,6 +68,7 @@ function validateDescription (value) {
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
+//отправка фото на сервер при успешной валидации
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
@@ -78,26 +80,15 @@ uploadForm.addEventListener('submit', (evt) => {
 
 //Закрываем окно esc
 const onFileEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt)
+  && !evt.target.closest('.text__hashtags')
+  && !evt.target.closest('.text__description')) {
     evt.preventDefault();
     closeButton();
   }
 };
 
-//исключаем закрытие полей формы при нажатии esc
-hashtagInput.addEventListener('click', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.stopPropagation();
-  }
-});
-
-descriptionInput.addEventListener('click', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.stopPropagation();
-  }
-});
-
-//
+//открываем окно для загрузки фото
 uploadFile.addEventListener('input', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
