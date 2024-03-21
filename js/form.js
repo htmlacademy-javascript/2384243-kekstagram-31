@@ -7,6 +7,7 @@ const uploadForm = document.querySelector('.img-upload__form');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const descriptionInput = uploadForm.querySelector('.text__description');
 const body = document.body;//?
+let hashtagErrorMessage = null;
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -21,47 +22,43 @@ function validateHashtag (value) {
     return true;
   }
 
-  const hashtags = value.split(' '); //создаем массив с пробелами
+  const hashtags = value.toLowerCase().split(' '); //создаем массив с пробелами
   if (hashtags.length > 5) {
+    hashtagErrorMessage = 'превышено количество хэштегов';
     return false;
   }
 
   if (new Set(hashtags).size !== hashtags.length) {
   //создаем новый массив без повторений элементов, находим длину и сравниваем с длиной массива
   //если есть неравенство, то в массиве имеется дубликат
+    hashtagErrorMessage = 'хэштеги повторяются';
     return false;
   }
 
-  for (let i = 0; i <= hashtags.length; i++) {
-    const hashtag = hashtags[i];
+  hashtags.forEach((hashtag) => {
 
     if(!hashtag.startsWith('#')) {
+      hashtagErrorMessage = 'введён невалидный хэштег';
       return false;
     }
 
     if(hashtag.length < 2 || hashtag.length > 20) {
+      hashtagErrorMessage = 'введён невалидный хэштег';
       return false;
     }
 
     const regExp = /^#[a-zа-яё0-9]{1,19}$/i;
     if (!regExp.test(hashtag)) {
+      hashtagErrorMessage = 'введён невалидный хэштег';
       return false;
     }
-  }
 
-
-  //   return 'хэштеги повторяются';'введён невалидный хэштег';
-  // один и тот же хэштег не может быть использован дважды
-
-  // return 'нельзя указать больше пяти хэштегов';
+    return true;
+  });
 }
 
-// //функция вывода ошибки
-// function getHashtagErrorMessage (value) {
-// }
-
 //Чтобы описать валидации в JavaScript, нужно вызвать метод .addValidator()
-pristine.addValidator(hashtagInput, validateHashtag);
+pristine.addValidator(hashtagInput, validateHashtag, () => hashtagErrorMessage);
 
 //проверяем макс количество символов в описании
 function validateDescription (value) {
@@ -87,6 +84,20 @@ const onFileEscKeydown = (evt) => {
   }
 };
 
+//исключаем закрытие полей формы при нажатии esc
+hashtagInput.addEventListener('click', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.stopPropagation();
+  }
+});
+
+descriptionInput.addEventListener('click', (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.stopPropagation();
+  }
+});
+
+//
 uploadFile.addEventListener('input', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
@@ -94,7 +105,7 @@ uploadFile.addEventListener('input', () => {
   document.addEventListener('keydown', onFileEscKeydown);
 });
 
-function closeButton (){
+function closeButton () {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onFileEscKeydown);
