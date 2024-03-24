@@ -54,4 +54,5 @@ const createPhotoPost = () => ({
 });
 
 const createPosts = () => Array.from({length: AMOUNT_POSTS}, createPhotoPost);
+
 export {createPosts};
