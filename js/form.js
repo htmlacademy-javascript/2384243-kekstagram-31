@@ -19,7 +19,6 @@ const onFileEscKeydown = (evt) => {
 uploadFile.addEventListener('change', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
-
   document.addEventListener('keydown', onFileEscKeydown);
 });
 
@@ -31,16 +30,11 @@ function closeButton () {
 
   //очищаем форму
   uploadFile.value = '';
-  document.querySelector('.scale__control--value').value = '';
-  // document.querySelector('.scale__control').value = '';
+  document.querySelector('.scale__control--value').value = `${100}%`;
   document.querySelector('.img-upload__preview').style.transform = '';
   document.querySelector('.effect-level__slider').noUiSlider.set(100);
   document.querySelector('.img-upload__preview').style.filter = 'none';
   document.querySelector('.img-upload__effect-level').classList.add('hidden');
-  // document.getElementById('upload-select-image').reset();
 }
 
-
-closeButtonElement.addEventListener('click', () => {
-  closeButton ();
-});
+closeButtonElement.addEventListener('click', closeButton);
