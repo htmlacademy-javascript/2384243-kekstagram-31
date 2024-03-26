@@ -48,6 +48,10 @@ sliderElement.noUiSlider.on('update', () => {
       setFilterConfig(currentEffect);
       imgPreview.style.filter = `brightness(${effectLevelInput.value})`;
       break;
+    case 'none':
+      imgPreview.style.filter = 'none';
+      sliderContainer.classList.add('hidden');
+      break;
     default:
       imgPreview.style.filter = 'none';
       break;
@@ -60,8 +64,8 @@ function onEffectChange (evt) {
     sliderContainer.classList.add('hidden');
   } else {
     sliderContainer.classList.remove('hidden');
-    sliderElement.noUiSlider.set(100);
   }
+  sliderElement.noUiSlider.set(100);
 }
 
 effectsList.addEventListener('change', onEffectChange);
