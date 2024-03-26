@@ -29,23 +29,23 @@ sliderElement.noUiSlider.on('update', () => {
 
   switch (currentEffect) {
     case 'chrome':
-      setFilterConfig(currentEffect);
+      setFilterConfig();
       imgPreview.style.filter = `grayscale(${effectLevelInput.value})`;
       break;
     case 'sepia':
-      setFilterConfig(currentEffect);
+      setFilterConfig();
       imgPreview.style.filter = `sepia(${effectLevelInput.value})`;
       break;
     case 'marvin':
-      setFilterConfig(currentEffect);
+      setFilterConfig();
       imgPreview.style.filter = `invert(${effectLevelInput.value}%)`;
       break;
     case 'phobos':
-      setFilterConfig(currentEffect);
+      setFilterConfig();
       imgPreview.style.filter = `blur(${effectLevelInput.value}px)`;
       break;
     case 'heat':
-      setFilterConfig(currentEffect);
+      setFilterConfig();
       imgPreview.style.filter = `brightness(${effectLevelInput.value})`;
       break;
     case 'none':

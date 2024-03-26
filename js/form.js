@@ -5,7 +5,7 @@ const uploadOverlay = document.querySelector('.img-upload__overlay'); //загр
 const closeButtonElement = document.querySelector('.img-upload__cancel');
 const body = document.body;//?
 
-//Закрываем окно esc
+// Закрываем окно esc
 const onFileEscKeydown = (evt) => {
   if (isEscapeKey(evt)
   && !evt.target.closest('.text__hashtags')

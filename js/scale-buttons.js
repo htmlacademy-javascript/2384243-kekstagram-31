@@ -16,6 +16,8 @@ buttonSmaller.addEventListener ('click', () => {
 });
 
 buttonBigger.addEventListener ('click', () => {
+  scaleValue = parseInt(scaleControlInput.value, 10);
+
   if (scaleValue < 100) {
     scaleValue += 25;
     scaleControlInput.value = `${scaleValue}%`;
