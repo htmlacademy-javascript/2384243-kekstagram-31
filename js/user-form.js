@@ -16,17 +16,20 @@ const onFileEscKeydown = (evt) => {
 };
 
 //открываем окно для загрузки фото
-uploadFile.addEventListener('change', () => {
+function openButton () {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onFileEscKeydown);
-});
+}
+
+uploadFile.addEventListener('change', openButton);//?
 
 //закрываем окно
 function closeButton () {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onFileEscKeydown);
+  // document.removeEventListener('click', closeButton);
 
   //очищаем форму
   uploadFile.value = '';
@@ -38,3 +41,5 @@ function closeButton () {
 }
 
 closeButtonElement.addEventListener('click', closeButton);
+
+export {openButton, closeButton};

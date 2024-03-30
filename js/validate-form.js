@@ -1,8 +1,9 @@
+import {showErrorMessage, showSuccessMessage} from './util.js';
+// import {closeButton} from './user-form.js';
+
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const descriptionInput = uploadForm.querySelector('.text__description');
-
-let hashtagErrorMessage = null;
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -10,6 +11,8 @@ const pristine = new Pristine(uploadForm, {
   errorTextTag: 'div',
   errorTextClass:'img-upload__field-wrapper--error',
 });
+
+let hashtagErrorMessage = null;
 
 //функция проверки хэштега
 function validateHashtag (value) {
@@ -64,11 +67,38 @@ function validateDescription (value) {
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
 //отправка фото на сервер при успешной валидации
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+const setUserFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    uploadForm.submit();
-  }
-});
+    const isValid = pristine.validate();
+    if (isValid) {
+      // uploadForm.submit();
+      const formData = new FormData(evt.target);
+
+      fetch('https://31.javascript.htmlacademy.pro/kekstagram',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            onSuccess();
+            showSuccessMessage();
+            // closeNotification();
+          } else {
+            showErrorMessage();
+            // closeNotification();
+          }
+        })
+        .catch(() => {
+          showErrorMessage();
+          // closeNotification();
+        });
+      // .finally();
+    }
+  });
+};
+
+export {setUserFormSubmit};
