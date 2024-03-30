@@ -1,4 +1,4 @@
-import {showErrorMessage, showSuccessMessage} from './util.js';
+import {showErrorMessage, showSuccessMessage, closeNotification} from './util.js';
 // import {closeButton} from './user-form.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -86,15 +86,15 @@ const setUserFormSubmit = (onSuccess) => {
           if (response.ok) {
             onSuccess();
             showSuccessMessage();
-            // closeNotification();
+            closeNotification();
           } else {
             showErrorMessage();
-            // closeNotification();
+            closeNotification();
           }
         })
         .catch(() => {
           showErrorMessage();
-          // closeNotification();
+          closeNotification();
         });
       // .finally();
     }
