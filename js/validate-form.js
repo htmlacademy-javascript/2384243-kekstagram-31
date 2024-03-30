@@ -1,11 +1,11 @@
-import {showErrorMessage, showSuccessMessage, closeNotification} from './util.js';
+import {showErrorMessage, showSuccessMessage} from './util.js';
 // import {closeButton} from './user-form.js';
 
-const uploadForm = document.querySelector('.img-upload__form');
-const hashtagInput = uploadForm.querySelector('.text__hashtags');
-const descriptionInput = uploadForm.querySelector('.text__description');
+const form = document.querySelector('.img-upload__form');
+const hashtagInput = form.querySelector('.text__hashtags');
+const descriptionInput = form.querySelector('.text__description');
 
-const pristine = new Pristine(uploadForm, {
+const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent:'img-upload__field-wrapper',
   errorTextTag: 'div',
@@ -68,7 +68,7 @@ pristine.addValidator(descriptionInput, validateDescription, 'длина ком�
 
 //отправка фото на сервер при успешной валидации
 const setUserFormSubmit = (onSuccess) => {
-  uploadForm.addEventListener('submit', (evt) => {
+  form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
@@ -86,15 +86,12 @@ const setUserFormSubmit = (onSuccess) => {
           if (response.ok) {
             onSuccess();
             showSuccessMessage();
-            closeNotification();
           } else {
             showErrorMessage();
-            closeNotification();
           }
         })
         .catch(() => {
           showErrorMessage();
-          closeNotification();
         });
       // .finally();
     }

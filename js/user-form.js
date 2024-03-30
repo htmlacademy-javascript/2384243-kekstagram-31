@@ -1,8 +1,9 @@
 import {isEscapeKey} from './util.js';
 
-const uploadFile = document.querySelector('.img-upload__input'); //Поле выбора файла для загрузки
-const uploadOverlay = document.querySelector('.img-upload__overlay'); //загрузка наложения
-const closeButtonElement = document.querySelector('.img-upload__cancel');
+const form = document.querySelector('.img-upload__form');
+const uploadFile = form.querySelector('.img-upload__input'); //Поле выбора файла для загрузки
+const uploadOverlay = form.querySelector('.img-upload__overlay'); //загрузка наложения
+const closeButtonElement = form.querySelector('.img-upload__cancel');
 const body = document.body;//?
 
 // Закрываем окно esc
@@ -29,10 +30,11 @@ function closeButton () {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onFileEscKeydown);
-  // document.removeEventListener('click', closeButton);
+  document.removeEventListener('click', closeButton);
 
   //очищаем форму
   uploadFile.value = '';
+  form.reset();
   document.querySelector('.scale__control--value').value = `${100}%`;
   document.querySelector('.img-upload__preview').style.transform = '';
   document.querySelector('.effect-level__slider').noUiSlider.set(100);
@@ -42,4 +44,4 @@ function closeButton () {
 
 closeButtonElement.addEventListener('click', closeButton);
 
-export {openButton, closeButton};
+export {closeButton};

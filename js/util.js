@@ -48,17 +48,38 @@ const showLoadError = (message) => {
   }, ERROR_SHOW_TIME);
 };
 
-
-//сообщения при загрузке изображений
+//находим шаблоны сообщений
 const errorContainerTemplate = document.querySelector('#error').content;
 const successContainerTemplate = document.querySelector('#success').content;
+// const closeButton = errorContainerTemplate.querySelector('.error__button') || successContainerTemplate.querySelector('.success__button');
 
+//закрываем окно с уведомлением
+const closeNotification = (evt) => {
+
+  evt.stopPropagation();
+
+  const notification = evt.target.closest('.error') || evt.target.closest('.success');
+  const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
+  const closeBlock = evt.target.closest('.error__button') || evt.target.closest('.success__button');
+
+  if (closeBlock || isEscapeKey(evt) || !notificationBlock) {
+    notification.remove();
+    closeBlock.removeEventListener('click', closeNotification);
+    body.removeEventListener('click', closeNotification);
+    body.removeEventListener('keydown', closeNotification);
+  }
+};
+
+//сообщения при загрузке изображений
 const showErrorMessage = (message) => {
   const errorContainer = errorContainerTemplate.cloneNode(true);
   if (message) {
     errorContainer.querySelector('.error__title').textContent = message;
   }
   body.append(errorContainer);
+  // closeButton.addEventListener('click', closeNotification);
+  body.addEventListener('click', closeNotification);
+  body.addEventListener('keydown', closeNotification);
 };
 
 const showSuccessMessage = (message) => {
@@ -67,29 +88,10 @@ const showSuccessMessage = (message) => {
     successContainer.querySelector('.success__title').textContent = message;
   }
   body.append(successContainer);
+  // closeButton.addEventListener('click', closeNotification);
+  body.addEventListener('click', closeNotification);
+  body.addEventListener('keydown', closeNotification);
 };
-
-//
-const notification = errorContainerTemplate.querySelector('.error') || successContainerTemplate.querySelector('.success');
-const closeButton = errorContainerTemplate.querySelector('.error__button') || successContainerTemplate.querySelector('.success__button');
-// const errorContainer = errorContainerTemplate.cloneNode(true);
-// body.append(errorContainer);
-// const successContainer = successContainerTemplate.cloneNode(true);
-// body.append(successContainer);
-
-const closeNotification = (evt) => {
-
-  // evt.stopPropagation();
-  if (evt.target === notification || evt.target === closeButton || isEscapeKey(evt)) {
-    notification.remove();
-    body.removeEventListener('click', closeNotification);
-    body.removeEventListener('keydown', closeNotification);
-  }
-};
-
-closeButton.addEventListener('click', closeNotification);
-body.addEventListener('click', closeNotification);
-body.addEventListener('keydown', closeNotification);
 
 export {getRandomInteger, createRandomIdFromRangeGenerator, getRandomArrayElement,
-  isEscapeKey, showLoadError, showErrorMessage, showSuccessMessage, closeNotification};
+  isEscapeKey, showLoadError, showErrorMessage, showSuccessMessage};
