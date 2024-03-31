@@ -58,40 +58,61 @@ const closeNotification = (evt) => {
 
   evt.stopPropagation();
 
-  const notification = evt.target.closest('.error') || evt.target.closest('.success');
   const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
   const closeBlock = evt.target.closest('.error__button') || evt.target.closest('.success__button');
 
   if (closeBlock || isEscapeKey(evt) || !notificationBlock) {
+    const notification = document.querySelector('.error') || document.querySelector('.success');
     notification.remove();
-    closeBlock.removeEventListener('click', closeNotification);
+    // closeBlock.removeEventListener('click', closeNotification);
     body.removeEventListener('click', closeNotification);
     body.removeEventListener('keydown', closeNotification);
   }
 };
 
-//сообщения при загрузке изображений
-const showErrorMessage = (message) => {
-  const errorContainer = errorContainerTemplate.cloneNode(true);
+// //сообщения при загрузке изображений
+// const showErrorMessage = (message) => {
+//   const errorContainer = errorContainerTemplate.cloneNode(true);
+//   if (message) {
+//     errorContainer.querySelector('.error__title').textContent = message;
+//   }
+//   body.append(errorContainer);
+//   // closeButton.addEventListener('click', closeNotification);
+//   body.addEventListener('click', closeNotification);
+//   body.addEventListener('keydown', closeNotification);
+// };
+
+// const showSuccessMessage = (message) => {
+//   const successContainer = successContainerTemplate.cloneNode(true);
+//   if (message) {
+//     successContainer.querySelector('.success__title').textContent = message;
+//   }
+//   body.append(successContainer);
+//   // closeButton.addEventListener('click', closeNotification);
+//   body.addEventListener('click', closeNotification);
+//   body.addEventListener('keydown', closeNotification);
+// };
+
+const errorContainer = errorContainerTemplate.cloneNode(true);
+const successContainer = successContainerTemplate.cloneNode(true);
+const Mes = {
+  ERROR_MESSAGE: `${'.error__title'}`,
+  SUCCESS_MESSAGE: `${'.success__title'}`,
+};
+
+const showMessage = (message, mes, container) => {
   if (message) {
-    errorContainer.querySelector('.error__title').textContent = message;
+    container.querySelector(mes).textContent = message;
   }
-  body.append(errorContainer);
-  // closeButton.addEventListener('click', closeNotification);
+  body.append(container);
   body.addEventListener('click', closeNotification);
   body.addEventListener('keydown', closeNotification);
 };
 
-const showSuccessMessage = (message) => {
-  const successContainer = successContainerTemplate.cloneNode(true);
-  if (message) {
-    successContainer.querySelector('.success__title').textContent = message;
-  }
-  body.append(successContainer);
-  // closeButton.addEventListener('click', closeNotification);
-  body.addEventListener('click', closeNotification);
-  body.addEventListener('keydown', closeNotification);
-};
+//сообщения при загрузке изображений
+const showErrorMessage = () => showMessage(Mes.ERROR_MESSAGE, errorContainer);
+
+const showSuccessMessage = () => showMessage(Mes.SUCCESS_MESSAGE, successContainer);
 
 export {getRandomInteger, createRandomIdFromRangeGenerator, getRandomArrayElement,
   isEscapeKey, showLoadError, showErrorMessage, showSuccessMessage};

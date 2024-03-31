@@ -1,8 +1,8 @@
 import {isEscapeKey} from './util.js';
 
 const form = document.querySelector('.img-upload__form');
-const uploadFile = form.querySelector('.img-upload__input'); //Поле выбора файла для загрузки
-const uploadOverlay = form.querySelector('.img-upload__overlay'); //загрузка наложения
+const uploadFile = form.querySelector('.img-upload__input');
+const uploadOverlay = form.querySelector('.img-upload__overlay');
 const closeButtonElement = form.querySelector('.img-upload__cancel');
 const body = document.body;//?
 

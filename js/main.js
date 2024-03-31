@@ -6,30 +6,26 @@ import './user-form.js';//?
 import './validate-form.js';//?
 import './scale-buttons.js';
 import './img-effects.js';
+import {getData} from './api.js';
 
 import {createPosts} from './create-thumbnails.js';
 import {closeButton} from './user-form.js';
 import {setUserFormSubmit} from './validate-form.js';
-import {showLoadError} from './util.js';
+// import {showLoadError} from './util.js';
 
 // fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
-//   .then((response) => response.json())
-//   .then((posts) => {
-//     createPosts(posts);
-//   });
-
-fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error(`${response.status} ${response.statusText}`);
-  })
+//   .then((response) => {
+//     if (response.ok) {
+//       return response.json();
+//     }
+//     throw new Error(`${response.status} ${response.statusText}`);
+//   })
+getData()
   .then((posts) => {
     createPosts(posts);
-  })
-  .catch(() => {
-    showLoadError();
   });
+// .catch(() => {
+//   showLoadError();
+// });
 
 setUserFormSubmit(closeButton);
