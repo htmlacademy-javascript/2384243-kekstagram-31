@@ -1,10 +1,10 @@
-import {showErrorMessage, showSuccessMessage} from './util.js';
-import {showLoadError} from './util.js';
+import {showGetDataError, showErrorMessage, showSuccessMessage} from './notifications.js';
+import {closeButton} from './user-form.js';
 
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 const Route = {
   GET_DATA: '/data',
-  SEND_DATA: '/1',
+  SEND_DATA: '/',
 };
 
 const getData = () => fetch(`${BASE_URL}${Route.GET_DATA}`)
@@ -15,7 +15,7 @@ const getData = () => fetch(`${BASE_URL}${Route.GET_DATA}`)
     return response.json();
   })
   .catch(() => {
-    showLoadError();
+    showGetDataError();
   });
 
 const sendData = (body) => fetch(`${BASE_URL}${Route.SEND_DATA}`,
@@ -26,12 +26,13 @@ const sendData = (body) => fetch(`${BASE_URL}${Route.SEND_DATA}`,
   .then((response) => {
     if (!response.ok) {
       showErrorMessage();
+    } else {
+      showSuccessMessage();
+      closeButton();
     }
-    showSuccessMessage();
   })
   .catch(() => {
     showErrorMessage();
   });
-// .finally();;
 
 export {getData, sendData};

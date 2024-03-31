@@ -1,15 +1,14 @@
-// import {showErrorMessage, showSuccessMessage} from './util.js';
 import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = form.querySelector('.text__hashtags');
 const descriptionInput = form.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SENDING: 'Отправляю...'
 };
-const submitButton = form.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -72,7 +71,7 @@ function validateDescription (value) {
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
-//
+//блокировка кнопки отправки изображения
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = SubmitButtonText.SENDING;
@@ -83,40 +82,15 @@ const unBlockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-//отправка фото на сервер при успешной валидации
-const setUserFormSubmit = (onSuccess) => {
+//отправляем фото на сервер при успешной валидации
+const setUserFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
-      // form.submit();
-      // const formData = new FormData(evt.target);
-
-      // fetch('https://31.javascript.htmlacadem.pro/kekstagram',
-      //   {
-      //     method: 'POST',
-      //     body: formData,
-      //   }
-      // )
-      //   .then((response) => {
-      //     if (response.ok) {
-      //       onSuccess();
-      //       showSuccessMessage();
-      //     } else {
-      //       showErrorMessage();
-      //     }
-      //   })
-      //   .catch(() => {
-      //     showErrorMessage();
-      //   });
-      // .finally();
       sendData(new FormData(evt.target))
-        .then(onSuccess)
-        // .catch(() => {
-        //   showErrorMessage();
-        // })
         .finally(unBlockSubmitButton);
     }
   });

@@ -1,63 +1,63 @@
-// //сообщение об ошибке при загрузке данных с сервера
-// const ERROR_SHOW_TIME = 5000;
+import {isEscapeKey} from './util.js';
 
-// const dataErrorTemplate = document.querySelector('#data-error').content;
-// const body = document.body;
+const body = document.body;
 
-// const showLoadError = (message) => {
-//   const dataError = dataErrorTemplate.cloneNode(true);
-//   if(message) {
-//     dataError.querySelector('.data-error__title').textContent = message;
-//   }
-//   body.append(dataError);
+//закрываем окно с уведомлением
+const closeNotification = (evt) => {
 
-//   const dataErrorMessage = body.querySelector('.data-error');
+  evt.stopPropagation();
 
-//   setTimeout(() => {
-//     dataErrorMessage.remove();
-//   }, ERROR_SHOW_TIME);
-// };
+  const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
+  const closeBlock = evt.target.closest('.error__button') || evt.target.closest('.success__button');
 
-// //находим шаблоны сообщений
-// const errorContainerTemplate = document.querySelector('#error').content;
-// const successContainerTemplate = document.querySelector('#success').content;
-// // const closeButton = errorContainerTemplate.querySelector('.error__button') || successContainerTemplate.querySelector('.success__button');
+  if (closeBlock || isEscapeKey(evt) || !notificationBlock) {
+    const notification = document.querySelector('.error') || document.querySelector('.success');
+    notification.remove();
+    body.removeEventListener('click', closeNotification);
+    body.removeEventListener('keydown', closeNotification);
+  }
+};
 
-// //закрываем окно с уведомлением
-// const closeNotification = (evt) => {
+//находим шаблоны сообщений
+const errorContainerTemplate = document.querySelector('#error').content;
+const successContainerTemplate = document.querySelector('#success').content;
+const dataErrorTemplate = document.querySelector('#data-error').content;
 
-//   evt.stopPropagation();
+//копируем
+const errorContainer = errorContainerTemplate.querySelector('.error').cloneNode(true);
+const successContainer = successContainerTemplate.querySelector('.success').cloneNode(true);
+const dataError = dataErrorTemplate.querySelector('.data-error').cloneNode(true);
 
-//   const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
-//   const closeBlock = evt.target.closest('.error__button') || evt.target.closest('.success__button');
+const Notification = {
+  ERROR_MESSAGE: `${'.error__title'}`,
+  SUCCESS_MESSAGE: `${'.success__title'}`,
+  DATA_ERROR: `${'.data-error__title'}`,
+};
 
-//   if (closeBlock || isEscapeKey(evt) || !notificationBlock) {
-//     const notification = document.querySelector('.error') || document.querySelector('.success');
-//     notification.remove();
-//     // closeBlock.removeEventListener('click', closeNotification);
-//     body.removeEventListener('click', closeNotification);
-//     body.removeEventListener('keydown', closeNotification);
-//   }
-// };
+const showMessage = (message = null, notification, container) => {
+  if (message) {
+    container.querySelector(notification).textContent = message;
+  }
+  body.append(container);
+  body.addEventListener('click', closeNotification);
+  body.addEventListener('keydown', closeNotification);
+};
 
+//сообщения при загрузке изображений
+const showErrorMessage = () => showMessage(null, Notification.ERROR_MESSAGE, errorContainer);
+const showSuccessMessage = () => showMessage(null, Notification.SUCCESS_MESSAGE, successContainer);
+const showLoadError = () => showMessage(null, Notification.DATA_ERROR, dataError);
 
-// const errorContainer = errorContainerTemplate.cloneNode(true);
-// const successContainer = successContainerTemplate.cloneNode(true);
-// const Mes = {
-//   ERROR_MESSAGE: errorContainer.querySelector('.error__title'),
-//   SUCCESS_MESSAGE: successContainer.querySelector('.success__title')
-// };
+//сообщение об ошибке при загрузке данных с сервера
+const ERROR_SHOW_TIME = 5000;
 
-// const showMessage = (message, mes, container) => {
-//   if (message) {
-//     mes.textContent = message;
-//   }
-//   body.append(container);
-//   body.addEventListener('click', closeNotification);
-//   body.addEventListener('keydown', closeNotification);
-// };
+const showGetDataError = () => {
+  showLoadError();
+  const dataErrorMessage = body.querySelector('.data-error');
 
-// //сообщения при загрузке изображений
-// const showErrorMessage = () => showMessage(Mes.ERROR_MESSAGE, errorContainer);
+  setTimeout(() => {
+    dataErrorMessage.remove();
+  }, ERROR_SHOW_TIME);
+};
 
-// const showSuccessMessage = () => showMessage(Mes.SUCCESS_MESSAGE, successContainer);
+export {showGetDataError, showErrorMessage, showSuccessMessage};

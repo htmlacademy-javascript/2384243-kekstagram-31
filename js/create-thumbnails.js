@@ -1,4 +1,3 @@
-// import {createPosts} from './data.js';
 import {openBigPicture} from './create-big-picture.js';
 
 //находим шаблон фотографии пользователя
@@ -9,10 +8,7 @@ const templateUserPicture = document.querySelector('#picture')
 //контейнер, в который будем вкладывать фотографии
 const containerUsersPictures = document.querySelector('.pictures');
 
-// //массив фотографий
-// const usersPictures = createPosts();
-
-//
+// создаем массив фотографий
 const createPosts = (usersPictures) => {
   //Создаём "коробочку"
   const usersPicturesFragment = document.createDocumentFragment();
