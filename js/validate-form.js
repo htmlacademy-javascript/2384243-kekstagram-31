@@ -1,15 +1,23 @@
-const uploadForm = document.querySelector('.img-upload__form');
-const hashtagInput = uploadForm.querySelector('.text__hashtags');
-const descriptionInput = uploadForm.querySelector('.text__description');
+import {sendData} from './api.js';
 
-let hashtagErrorMessage = null;
+const form = document.querySelector('.img-upload__form');
+const hashtagInput = form.querySelector('.text__hashtags');
+const descriptionInput = form.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
 
-const pristine = new Pristine(uploadForm, {
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Отправляю...'
+};
+
+const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent:'img-upload__field-wrapper',
   errorTextTag: 'div',
   errorTextClass:'img-upload__field-wrapper--error',
 });
+
+let hashtagErrorMessage = null;
 
 //функция проверки хэштега
 function validateHashtag (value) {
@@ -63,12 +71,29 @@ function validateDescription (value) {
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
-//отправка фото на сервер при успешной валидации
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+//блокировка кнопки отправки изображения
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    uploadForm.submit();
-  }
-});
+const unBlockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+//отправляем фото на сервер при успешной валидации
+const setUserFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .finally(unBlockSubmitButton);
+    }
+  });
+};
+
+export {setUserFormSubmit};
