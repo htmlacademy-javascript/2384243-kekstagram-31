@@ -63,7 +63,7 @@ function openComments () {
 
 //Открываем полноразмерную фотографию
 function openBigPicture (bigPicture) {
-  bigPictureElement.classList.remove('hidden');//Для отображения окна удаляем класс hidden у элемента .big-picture
+  bigPictureElement.classList.remove('hidden');
 
   //присваиваем данные фотографии
   currentPicture = bigPicture;
@@ -72,8 +72,8 @@ function openBigPicture (bigPicture) {
   bigPictureElement.querySelector('.social__caption').textContent = bigPicture.description; // * Описание фотографии
   bigPictureElement.querySelector('.likes-count').textContent = bigPicture.likes; // * Количество лайков
   bigPictureElement.querySelector('.social__comment-total-count').textContent = currentPicture.comments.length; //Общее количество комментариев
-
-  bigPictureSocialComments.innerHTML = '';// * очищаем список комментариев под фотографией
+  //очищаем список комментариев под фотографией
+  bigPictureSocialComments.innerHTML = '';
 
   openComments();
 
@@ -84,7 +84,6 @@ function openBigPicture (bigPicture) {
 
 function closeBigPicture () {
   bigPictureElement.classList.add('hidden');
-
   document.removeEventListener('keydown', onPictureEscKeydown);
   commentsLoader.removeEventListener('click', openComments);
   body.classList.remove('modal-open');
