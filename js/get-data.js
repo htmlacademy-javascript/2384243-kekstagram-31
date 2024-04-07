@@ -15,6 +15,11 @@ const activeButtonClass = 'img-filters__button--active';
 const inactiveClass = 'img-filters--inactive';
 let usersPictures = null;
 
+const clearUsersPictures = () => {
+  const pictures = document.querySelectorAll('.picture');
+  pictures.forEach((picture) => picture.remove());
+};
+
 filtersButtons.addEventListener('click', (evt) => {
   const currentButton = evt.target.closest('.img-filters__button');
   const activeButtonElement = imgFilters.querySelector('.img-filters__button--active');
@@ -24,34 +29,24 @@ filtersButtons.addEventListener('click', (evt) => {
     activeButtonElement.classList.remove(activeButtonClass);
     currentButton.classList.add(activeButtonClass);
   }
-  changeFilter ();
-});
 
-const clearUsersPictures = () => {
-  const pictures = document.querySelectorAll('.picture');
-  pictures.forEach((picture) => picture.remove());
-};
+  debounce (() => {
+    clearUsersPictures();
+    changeFilter ();
+  })();
+});
 
 function changeFilter () {
   const currentFilter = imgFilters.querySelector('.img-filters__button--active');
 
   if(currentFilter.id === FILTER.default) {
-    debounce(() => {
-      clearUsersPictures();
-      createPosts(usersPictures);
-    })();
+    createPosts(usersPictures);
   }
   if(currentFilter.id === FILTER.random){
-    debounce(() => {
-      clearUsersPictures();
-      createPosts(usersPictures.toSorted(() => 0.5 - Math.random()).slice(0, AMOUNT_RANDOM_IMG));
-    })();
+    createPosts(usersPictures.toSorted(() => 0.5 - Math.random()).slice(0, AMOUNT_RANDOM_IMG));
   }
   if(currentFilter.id === FILTER.discussed){
-    debounce(() => {
-      clearUsersPictures();
-      createPosts(usersPictures.slice().sort((rankA, rankB) => rankB.comments.length - rankA.comments.length));
-    })();
+    createPosts(usersPictures.slice().sort((rankA, rankB) => rankB.comments.length - rankA.comments.length));
   }
 }
 
