@@ -12,21 +12,22 @@ const containerUsersPictures = document.querySelector('.pictures');
 const createPosts = (usersPictures) => {
   //Создаём "коробочку"
   const usersPicturesFragment = document.createDocumentFragment();
-  //перебираем фотографии
-  usersPictures.forEach(({url, description, likes, comments, id}) => {
-    //клонируем шаблон
-    const userPicture = templateUserPicture.cloneNode(true);
 
-    //вставляем данные в шаблон
-    userPicture.querySelector('.picture__img').src = url;
-    userPicture.querySelector('.picture__img').alt = description;
-    userPicture.querySelector('.picture__likes').textContent = likes;
-    userPicture.querySelector('.picture__comments').textContent = comments.length;
-    userPicture.dataset.id = id;
+  usersPictures
+    .forEach(({url, description, likes, comments, id}) => { //перебираем фотографии
+      //клонируем шаблон
+      const userPicture = templateUserPicture.cloneNode(true);
 
-    //складываем фотографии в "коробку"
-    usersPicturesFragment.appendChild(userPicture);
-  });
+      //вставляем данные в шаблон
+      userPicture.querySelector('.picture__img').src = url;
+      userPicture.querySelector('.picture__img').alt = description;
+      userPicture.querySelector('.picture__likes').textContent = likes;
+      userPicture.querySelector('.picture__comments').textContent = comments.length;
+      userPicture.dataset.id = id;
+
+      //складываем фотографии в "коробку"
+      usersPicturesFragment.appendChild(userPicture);
+    });
 
   // И только в конце отрисовываем всё из "коробочки"
   containerUsersPictures.appendChild(usersPicturesFragment);

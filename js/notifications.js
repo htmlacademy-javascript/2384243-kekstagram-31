@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 
 const body = document.body;
+const ERROR_SHOW_TIME = 5000;
 
 //закрываем окно с уведомлением
 const closeNotification = (evt) => {
@@ -46,18 +47,19 @@ const showMessage = (message = null, notification, container) => {
 //сообщения при загрузке изображений
 const showErrorMessage = () => showMessage(null, Notification.ERROR_MESSAGE, errorContainer);
 const showSuccessMessage = () => showMessage(null, Notification.SUCCESS_MESSAGE, successContainer);
-const showLoadError = () => showMessage(null, Notification.DATA_ERROR, dataError);
-
-//сообщение об ошибке при загрузке данных с сервера
-const ERROR_SHOW_TIME = 5000;
-
-const showGetDataError = () => {
-  showLoadError();
+// const showLoadError = () => showMessage(null, Notification.DATA_ERROR, dataError);
+const showTypeFileError = (errMessage) => {
+  showMessage(errMessage, Notification.DATA_ERROR, dataError);
   const dataErrorMessage = body.querySelector('.data-error');
-
-  setTimeout(() => {
-    dataErrorMessage.remove();
-  }, ERROR_SHOW_TIME);
+  setTimeout(() => (dataErrorMessage.remove()), ERROR_SHOW_TIME);
 };
 
-export {showGetDataError, showErrorMessage, showSuccessMessage};
+//сообщение об ошибке при загрузке данных с сервера
+const showGetDataError = () => {
+  // showLoadError();
+  showMessage(null, Notification.DATA_ERROR, dataError);
+  const dataErrorMessage = body.querySelector('.data-error');
+  setTimeout(() => (dataErrorMessage.remove()), ERROR_SHOW_TIME);
+};
+
+export {showGetDataError, showErrorMessage, showSuccessMessage, showTypeFileError};
