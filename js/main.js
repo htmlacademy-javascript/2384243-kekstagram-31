@@ -8,7 +8,8 @@ import './img-effects.js';
 
 import {getData} from './api.js';
 import {createPosts} from './create-thumbnails.js';
-import {debounce} from './util.js';
+// import {debounce} from './util.js';
+// import {showTypeFileError} from './notifications.js';
 
 const imgFilters = document.querySelector('.img-filters');
 const defaultButton = document.getElementById('filter-default');
@@ -18,105 +19,116 @@ const activeButtonClass = 'img-filters__button--active';
 const inactiveClass = 'img-filters--inactive';
 const AMOUNT_RANDOM_IMG = 10;
 
+// let usersPictures = null;
+
+// const onFilterChange = (selector) => {
+//   const activeButtonElement = imgFilters.querySelector('.img-filters__button--active');
+//   const selectedFilter = document.querySelector(selector);
+//   activeButtonElement.classList.remove(activeButtonClass);
+//   selectedFilter.classList.add(activeButtonClass);
+// };
+
 const clearUsersPictures = () => {
   const pictures = document.querySelectorAll('.picture');
   pictures.forEach((picture) => picture.remove());
 };
 
-const onFilterChange = (evt) => {
+// const getDefaultImg = () => {
+//   clearUsersPictures();
+//   createPosts(usersPictures);
+// };
+
+// const getRandomImg = () => {
+//   clearUsersPictures();
+//   createPosts(usersPictures.toSorted(() => 0.5 - Math.random()).slice(0, AMOUNT_RANDOM_IMG));
+// };
+
+// const getDiscussedImg = () => {
+//   function sortComments (rankA, rankB) {
+//     return rankB.comments.length - rankA.comments.length;
+//   }
+
+//   clearUsersPictures();
+//   createPosts(usersPictures.slice().sort(sortComments));
+// };
+
+// defaultButton.addEventListener('click', () => {
+//   onFilterChange('#filter-default');
+//   debounce(getDefaultImg)();
+// });
+
+// randomButton.addEventListener('click', () => {
+//   onFilterChange('#filter-random');
+//   debounce(getRandomImg)();
+// });
+
+// discussedButton.addEventListener('click', () => {
+//   onFilterChange('#filter-discussed');
+//   debounce(getDiscussedImg)();
+// });
+
+const filterButton = imgFilters.querySelector('.img-filters__button');
+
+imgFilters.addEventListener('click', (evt) => {
+  const currentButton = evt.target.closest('.img-filters__button');
   const activeButtonElement = imgFilters.querySelector('.img-filters__button--active');
-  if (activeButtonElement === evt.target) {
-    activeButtonElement.classList.toggle(activeButtonClass);
-    evt.target.classList.toggle(activeButtonClass);
+  if (currentButton) {
+    evt.preventDefault();
+    activeButtonElement.classList.remove(activeButtonClass);
+    currentButton.classList.add(activeButtonClass);
   }
-};
-
-const getDefaultImg = () => {
   clearUsersPictures();
-  getData()
-    .then((posts) => {
-      createPosts(posts);
-    });
-  // defaultButton.classList.add(activeButtonClass);
-  // randomButton.classList.remove(activeButtonClass);
-  // discussedButton.classList.remove(activeButtonClass);
-  onFilterChange();
-  // defaultButton.removeEventListener('click', getDefaultImg);
-};
+  changeFilter ();
+});
 
-const getRandomImg = () => {
-  clearUsersPictures();
-  // const generator = createRandomIdFromRangeGenerator(0, 24);
-  getData()
-    .then((posts) => {
-      createPosts(posts.toSorted(() => 0.5 - Math.random()).slice(0, AMOUNT_RANDOM_IMG));
-    });
-  // randomButton.classList.add(activeButtonClass);
-  // defaultButton.classList.remove(activeButtonClass);
-  // discussedButton.classList.remove(activeButtonClass);
-  onFilterChange();
-  // randomButton.removeEventListener('click', getRandomImg);
-};
+function sortComments (rankA, rankB) {
+  return rankB.comments.length - rankA.comments.length;
+}
 
-const getDiscussedImg = () => {
+let usersPictures = null;
 
-  function sortComments (a, b) {
-    return b.comments.length - a.comments.length;
+function changeFilter () {
+  // clearUsersPictures();
+  const currentFilter = filterButton.classList.contains(activeButtonClass);
+
+  if(defaultButton && currentFilter) {
+    createPosts(usersPictures);
   }
-
-  clearUsersPictures();
-  getData()
-    .then((posts) => {
-      createPosts(posts
-        .slice()
-        .sort(sortComments)
-      );
-    });
-  // discussedButton.classList.add(activeButtonClass);
-  // defaultButton.classList.remove(activeButtonClass);
-  // randomButton.classList.remove(activeButtonClass);
-  onFilterChange();
-};
-
-const defaultButtonClick = (cb) => {
-  defaultButton.addEventListener('click', getDefaultImg);
-  cb();
-};
-
-const randomButtonClick = (cb) => {
-  randomButton.addEventListener('click', getRandomImg);
-  cb();
-};
-
-const discussedButtonClick = (cb) => {
-  discussedButton.addEventListener('click', getDiscussedImg);
-  cb();
-};
+  if(randomButton && currentFilter){
+    createPosts(usersPictures.toSorted(() => 0.5 - Math.random()).slice(0, AMOUNT_RANDOM_IMG));
+  }
+  if(discussedButton && currentFilter){
+    createPosts(usersPictures.slice().sort(sortComments));
+  }
+}
 
 getData()
   .then((posts) => {
-    createPosts(posts);
     imgFilters.classList.remove(inactiveClass);
-    defaultButtonClick(debounce(() => getDefaultImg));
-    randomButtonClick(debounce(() => getRandomImg));
-    discussedButtonClick(debounce(() => getDiscussedImg));
+    createPosts(posts);
+    usersPictures = posts;
   });
 
 
-// avatar.js
+// // avatar.js
 // const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
 
 // const fileChooser = document.getElementById('upload-file');
 // const preview = document.querySelector('.img-upload__preview img');
+// const previewItem = document.querySelectorAll('.effects__preview');
+// const uploadOverlay = document.querySelector('.img-upload__overlay');
 
 // fileChooser.addEventListener('change', () => {
 //   const file = fileChooser.files[0];
 //   const fileName = file.name.toLowerCase();
 //   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-//   if (matches) {
-//     preview.src = URL.createObjectURL(file);
+//   if (!matches) {
+//     showTypeFileError('Неверный тип файла');
+//     uploadOverlay.classList.add('hidden');
 //   }
+//   preview.src = URL.createObjectURL(file);
+//   previewItem.forEach((item) => {
+//     item.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
+//   });
 // });
-//мини сделать
-//ошибка выбран файла
