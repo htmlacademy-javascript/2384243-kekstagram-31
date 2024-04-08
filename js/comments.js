@@ -1,6 +1,7 @@
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureSocialComments = bigPictureElement.querySelector('.social__comments');
 const commentsLoader = bigPictureElement.querySelector('.comments-loader');
+const socialCommentShownCount = bigPictureElement.querySelector('.social__comment-shown-count');
 
 const LOADING_STEP = 5;
 let commentShownCount = 0;
@@ -29,10 +30,18 @@ const createCommentsFragment = (comments) => {
   return commentsFragment;
 };
 
-function openComments () {
+function openComments (photo, isInit) {
+  if (isInit) {
+    commentShownCount = 0;
+  }
+  if (photo) {
+    currentPicture = photo;
+  }
+
   bigPictureSocialComments.appendChild(createCommentsFragment(currentPicture.comments.slice(commentShownCount, commentShownCount += LOADING_STEP)));
   const commentsCount = commentShownCount < currentPicture.comments.length ? commentShownCount : currentPicture.comments.length;
-  bigPictureElement.querySelector('.social__comment-shown-count').textContent = commentsCount;
+  socialCommentShownCount.textContent = commentsCount;
+
   if (commentShownCount >= currentPicture.comments.length) {
     commentsLoader.classList.add('hidden');
   } else {
