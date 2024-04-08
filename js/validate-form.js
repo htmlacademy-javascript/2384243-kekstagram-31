@@ -19,26 +19,22 @@ const pristine = new Pristine(form, {
 
 let hashtagErrorMessage = null;
 
-//функция проверки хэштега
 function validateHashtag (value) {
   if (!value){
     return true;
   }
 
-  const hashtags = value.toLowerCase().split(' '); //создаем массив с пробелами
-  if (hashtags.length > 6) {
+  const hashtags = value.toLowerCase().split(' ').filter((tag) => tag !== '');
+  if (hashtags.length > 5) {
     hashtagErrorMessage = 'превышено количество хэштегов';
     return false;
   }
 
   if (new Set(hashtags).size !== hashtags.length) {
-  //создаем новый массив без повторений элементов, находим длину и сравниваем с длиной массива
-  //если есть неравенство, то в массиве имеется дубликат
     hashtagErrorMessage = 'хэштеги повторяются';
     return false;
   }
 
-  //метод .every проверяет удовлетворяют ли все элементы в массиве условиям в функции-колбэке
   return hashtags.every((hashtag) => {
 
     if(!hashtag.startsWith('#')) {
@@ -61,17 +57,14 @@ function validateHashtag (value) {
   });
 }
 
-//Чтобы описать валидации в JavaScript, нужно вызвать метод .addValidator()
 pristine.addValidator(hashtagInput, validateHashtag, () => hashtagErrorMessage);
 
-//проверяем макс количество символов в описании
 function validateDescription (value) {
   return value.length >= 0 && value.length <= 139;
 }
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
-//блокировка кнопки отправки изображения
 const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = SubmitButtonText.SENDING;
@@ -82,18 +75,15 @@ const unBlockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-//отправляем фото на сервер при успешной валидации
-const setUserFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-    const isValid = pristine.validate();
-    if (isValid) {
-      blockSubmitButton();
-      sendData(new FormData(evt.target))
-        .finally(unBlockSubmitButton);
-    }
-  });
-};
+  const isValid = pristine.validate();
+  if (isValid) {
+    blockSubmitButton();
+    sendData(new FormData(evt.target))
+      .finally(unBlockSubmitButton);
+  }
+});
 
-export {setUserFormSubmit}; //??????
+export {pristine};
