@@ -2,7 +2,7 @@ import {CONFIGS} from './slider-configs.js';
 
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectLevelInput = document.querySelector('.effect-level__value');
-const imgPreview = document.querySelector('.img-upload__preview');
+const imgPreview = document.querySelector('.img-upload__preview img');
 const effectsList = document.querySelector('.effects__list');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 

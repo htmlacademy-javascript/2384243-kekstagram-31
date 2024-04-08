@@ -24,8 +24,8 @@ function validateHashtag (value) {
     return true;
   }
 
-  const hashtags = value.toLowerCase().split(' ');
-  if (hashtags.length > 6) {
+  const hashtags = value.toLowerCase().split(' ').filter((tag) => tag !== '');
+  if (hashtags.length > 5) {
     hashtagErrorMessage = 'превышено количество хэштегов';
     return false;
   }
