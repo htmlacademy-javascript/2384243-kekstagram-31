@@ -25,7 +25,7 @@ const openBigPicture = (photo) => {
 
   bigPictureSocialComments.innerHTML = '';
 
-  openComments(bigPicture, true);
+  openComments(photo, true);
 
   commentsLoader.addEventListener('click', loadComments);
   document.addEventListener('keydown', onPictureEscKeydown);
