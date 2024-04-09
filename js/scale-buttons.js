@@ -1,7 +1,7 @@
 const buttonSmaller = document.querySelector('.scale__control--smaller');
 const buttonBigger = document.querySelector('.scale__control--bigger');
 const scaleControlInput = document.querySelector('.scale__control--value');
-const imgPreview = document.querySelector('.img-upload__preview img');
+const imgPreview = document.querySelector('.img-upload__preview');
 
 let scaleValue = null;
 

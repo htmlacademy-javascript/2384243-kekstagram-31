@@ -1,5 +1,5 @@
 import {showGetDataError, showErrorMessage, showSuccessMessage} from './notifications.js';
-import {closeButton} from './user-form.js';
+import {onCloseButtonClick} from './user-form.js';
 
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 const Route = {
@@ -7,32 +7,35 @@ const Route = {
   SEND_DATA: '/',
 };
 
-const getData = () => fetch(`${BASE_URL}${Route.GET_DATA}`)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Произошла ошибка ${response.status} ${response.statusText}`);
-    }
-    return response.json();
-  })
-  .catch(() => {
-    showGetDataError();
-  });
+const Method = {
+  GET: 'GET',
+  POST: 'POST',
+};
 
-const sendData = (body) => fetch(`${BASE_URL}${Route.SEND_DATA}`,
-  {
-    method: 'POST',
-    body,
-  })
-  .then((response) => {
-    if (!response.ok) {
-      showErrorMessage();
-    } else {
-      showSuccessMessage();
-      closeButton();
-    }
-  })
-  .catch(() => {
-    showErrorMessage();
-  });
+const ErrorText = {
+  GET_DATA: showGetDataError,
+  SEND_DATA: showErrorMessage,
+};
+
+const load = (route, errorText, method = Method.GET, body = null) =>
+  fetch(`${BASE_URL}${route}`, {method, body})
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error ();
+      } else {
+        if (method === Method.POST) {
+          showSuccessMessage();
+          onCloseButtonClick();
+        } else {
+          return response.json();
+        }
+      }
+    })
+    .catch(() => {
+      errorText();
+    });
+
+const getData = () => load(Route.GET_DATA, ErrorText.GET_DATA);
+const sendData = (body) => load(Route.SEND_DATA, ErrorText.SEND_DATA, Method.POST, body);
 
 export {getData, sendData};

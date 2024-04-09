@@ -1,7 +1,6 @@
-const bigPictureElement = document.querySelector('.big-picture');
-const bigPictureSocialComments = bigPictureElement.querySelector('.social__comments');
-const commentsLoader = bigPictureElement.querySelector('.comments-loader');
-const socialCommentShownCount = bigPictureElement.querySelector('.social__comment-shown-count');
+const bigPictureSocialComments = document.querySelector('.social__comments');
+const commentsLoader = document.querySelector('.comments-loader');
+const socialCommentShownCount = document.querySelector('.social__comment-shown-count');
 
 const LOADING_STEP = 5;
 let commentShownCount = 0;
@@ -30,7 +29,7 @@ const createCommentsFragment = (comments) => {
   return commentsFragment;
 };
 
-function openComments (photo, isInit) {
+const openComments = (photo, isInit) => {
   if (isInit) {
     commentShownCount = 0;
   }
@@ -47,6 +46,6 @@ function openComments (photo, isInit) {
   } else {
     commentsLoader.classList.remove('hidden');
   }
-}
+};
 
 export {openComments};

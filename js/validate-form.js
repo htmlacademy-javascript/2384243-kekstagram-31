@@ -1,14 +1,14 @@
-import {sendData} from './api.js';
+// import {sendData} from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = form.querySelector('.text__hashtags');
 const descriptionInput = form.querySelector('.text__description');
-const submitButton = form.querySelector('.img-upload__submit');
+// const submitButton = form.querySelector('.img-upload__submit');
 
-const SubmitButtonText = {
-  IDLE: 'Опубликовать',
-  SENDING: 'Отправляю...'
-};
+// const SubmitButtonText = {
+//   IDLE: 'Опубликовать',
+//   SENDING: 'Отправляю...'
+// };
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -19,7 +19,7 @@ const pristine = new Pristine(form, {
 
 let hashtagErrorMessage = null;
 
-function validateHashtag (value) {
+const validateHashtag = (value) => {
   if (!value){
     return true;
   }
@@ -55,7 +55,7 @@ function validateHashtag (value) {
 
     return true;
   });
-}
+};
 
 pristine.addValidator(hashtagInput, validateHashtag, () => hashtagErrorMessage);
 
@@ -65,25 +65,25 @@ function validateDescription (value) {
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
-};
+// const blockSubmitButton = () => {
+//   submitButton.disabled = true;
+//   submitButton.textContent = SubmitButtonText.SENDING;
+// };
 
-const unBlockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
-};
+// const unBlockSubmitButton = () => {
+//   submitButton.disabled = false;
+//   submitButton.textContent = SubmitButtonText.IDLE;
+// };
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+// form.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    blockSubmitButton();
-    sendData(new FormData(evt.target))
-      .finally(unBlockSubmitButton);
-  }
-});
+//   const isValid = pristine.validate();
+//   if (isValid) {
+//     blockSubmitButton();
+//     sendData(new FormData(evt.target))
+//       .finally(unBlockSubmitButton);
+//   }
+// });
 
 export {pristine};
