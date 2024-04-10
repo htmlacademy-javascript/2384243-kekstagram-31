@@ -1,6 +1,8 @@
 import {isEscapeKey} from './util.js';
 import {pristine} from './validate-form.js';
 
+const SCALE_VALUE = 100;
+
 const form = document.querySelector('.img-upload__form');
 const uploadFile = form.querySelector('.img-upload__input');
 const uploadOverlay = form.querySelector('.img-upload__overlay');
@@ -10,8 +12,6 @@ const imgPreview = form.querySelector('.img-upload__preview img');
 const effectLevelSlider = form.querySelector('.effect-level__slider');
 const imgUploadEffectLevel = form.querySelector('.img-upload__effect-level');
 const body = document.body;
-
-const SCALE_VALUE = 100;
 
 const onFileEscKeydown = (evt) => {
   if (isEscapeKey(evt)

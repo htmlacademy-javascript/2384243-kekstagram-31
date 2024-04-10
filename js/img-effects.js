@@ -1,12 +1,13 @@
 import {CONFIGS} from './slider-configs.js';
 
+const SCALE_VALUE = 100;
+
 const slider = document.querySelector('.effect-level__slider');
 const effectsList = document.querySelector('.effects__list');
 const effectLevelInput = document.querySelector('.effect-level__value');
 const imgPreview = document.querySelector('.img-upload__preview img');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 
-const SCALE_VALUE = 100;
 let prevEffect = null;
 let isConfigUpdate = false;
 

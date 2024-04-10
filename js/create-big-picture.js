@@ -13,7 +13,7 @@ const onPictureEscKeydown = (evt) => {
   }
 };
 
-const loadComments = () => openComments();
+const onLoadComments = () => openComments();
 
 const openBigPicture = (photo) => {
   bigPicture.classList.remove('hidden');
@@ -27,7 +27,7 @@ const openBigPicture = (photo) => {
 
   openComments(photo, true);
 
-  commentsLoader.addEventListener('click', loadComments);
+  commentsLoader.addEventListener('click', onLoadComments);
   document.addEventListener('keydown', onPictureEscKeydown);
   document.body.classList.add('modal-open');
 };
@@ -35,7 +35,7 @@ const openBigPicture = (photo) => {
 function closeBigPicture () {
   bigPicture.classList.add('hidden');
   document.removeEventListener('keydown', onPictureEscKeydown);
-  commentsLoader.removeEventListener('click', loadComments);
+  commentsLoader.removeEventListener('click', onLoadComments);
   document.body.classList.remove('modal-open');
 }
 

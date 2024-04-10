@@ -1,3 +1,13 @@
+const HASHTAG_AMOUNT = 5;
+const HASHTAG_LENGTH = {
+  min: 2,
+  max: 20,
+};
+const COMMENTS_LENGTH = {
+  min: 0,
+  max: 139,
+};
+
 const form = document.querySelector('.img-upload__form');
 const hashtagInput = form.querySelector('.text__hashtags');
 const descriptionInput = form.querySelector('.text__description');
@@ -17,7 +27,7 @@ const validateHashtag = (value) => {
   }
 
   const hashtags = value.toLowerCase().split(' ').filter((tag) => tag !== '');
-  if (hashtags.length > 5) {
+  if (hashtags.length > HASHTAG_AMOUNT) {
     hashtagErrorMessage = 'превышено количество хэштегов';
     return false;
   }
@@ -34,7 +44,7 @@ const validateHashtag = (value) => {
       return false;
     }
 
-    if(hashtag.length < 2 || hashtag.length > 20) {
+    if(hashtag.length < HASHTAG_LENGTH.min || hashtag.length > HASHTAG_LENGTH.max) {
       hashtagErrorMessage = 'введён невалидный хэштег';
       return false;
     }
@@ -52,7 +62,7 @@ const validateHashtag = (value) => {
 pristine.addValidator(hashtagInput, validateHashtag, () => hashtagErrorMessage);
 
 function validateDescription (value) {
-  return value.length >= 0 && value.length <= 139;
+  return value.length >= COMMENTS_LENGTH.min && value.length <= COMMENTS_LENGTH.max;
 }
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
