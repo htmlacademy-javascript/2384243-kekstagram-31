@@ -1,7 +1,12 @@
 import {isEscapeKey} from './util.js';
 
-const body = document.body;
 const ERROR_SHOW_TIME = 5000;
+const Notification = {
+  ERROR_MESSAGE: `${'.error__title'}`,
+  SUCCESS_MESSAGE: `${'.success__title'}`,
+  DATA_ERROR: `${'.data-error__title'}`,
+};
+const body = document.body;
 
 const onCloseClick = (evt) => {
   evt.stopPropagation();
@@ -24,12 +29,6 @@ const dataErrorTemplate = document.querySelector('#data-error').content;
 const errorContainer = errorContainerTemplate.querySelector('.error').cloneNode(true);
 const successContainer = successContainerTemplate.querySelector('.success').cloneNode(true);
 const dataError = dataErrorTemplate.querySelector('.data-error').cloneNode(true);
-
-const Notification = {
-  ERROR_MESSAGE: `${'.error__title'}`,
-  SUCCESS_MESSAGE: `${'.success__title'}`,
-  DATA_ERROR: `${'.data-error__title'}`,
-};
 
 const showMessage = (message = null, notification, container) => {
   if (message) {

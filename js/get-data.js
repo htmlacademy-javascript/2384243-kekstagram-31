@@ -2,17 +2,17 @@ import {getData} from './api.js';
 import {createPosts} from './create-thumbnails.js';
 import {debounce} from './util.js';
 
-const imgFilters = document.querySelector('.img-filters');
-const filtersButtons = imgFilters.querySelector('.img-filters__form');
-const activeButtonClass = 'img-filters__button--active';
-const inactiveClass = 'img-filters--inactive';
-
 const FILTER = {
   default: 'filter-default',
   random: 'filter-random',
   discussed: 'filter-discussed',
 };
 const AMOUNT_RANDOM_IMG = 10;
+
+const imgFilters = document.querySelector('.img-filters');
+const filtersButtons = imgFilters.querySelector('.img-filters__form');
+const activeButtonClass = 'img-filters__button--active';
+const inactiveClass = 'img-filters--inactive';
 
 let usersPictures = null;
 

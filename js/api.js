@@ -6,12 +6,10 @@ const Route = {
   GET_DATA: '/data',
   SEND_DATA: '/',
 };
-
 const Method = {
   GET: 'GET',
   POST: 'POST',
 };
-
 const ErrorText = {
   GET_DATA: showGetDataError,
   SEND_DATA: showErrorMessage,

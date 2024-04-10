@@ -1,8 +1,9 @@
+const LOADING_STEP = 5;
+
 const bigPictureSocialComments = document.querySelector('.social__comments');
 const commentsLoader = document.querySelector('.comments-loader');
 const socialCommentShownCount = document.querySelector('.social__comment-shown-count');
 
-const LOADING_STEP = 5;
 let commentShownCount = 0;
 let currentPicture = null;
 
