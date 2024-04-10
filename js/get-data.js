@@ -2,12 +2,12 @@ import {getData} from './api.js';
 import {createPosts} from './create-thumbnails.js';
 import {debounce} from './util.js';
 
+const AMOUNT_RANDOM_IMG = 10;
 const FILTER = {
   default: 'filter-default',
   random: 'filter-random',
   discussed: 'filter-discussed',
 };
-const AMOUNT_RANDOM_IMG = 10;
 
 const imgFilters = document.querySelector('.img-filters');
 const filtersButtons = imgFilters.querySelector('.img-filters__form');
