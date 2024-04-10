@@ -1,31 +1,30 @@
 import {CONFIGS} from './slider-configs.js';
 
-const sliderElement = document.querySelector('.effect-level__slider');
+const slider = document.querySelector('.effect-level__slider');
+const effectsList = document.querySelector('.effects__list');
 const effectLevelInput = document.querySelector('.effect-level__value');
 const imgPreview = document.querySelector('.img-upload__preview img');
-const effectsList = document.querySelector('.effects__list');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
 
-effectLevelInput.value = 100;
-
+const SCALE_VALUE = 100;
 let prevEffect = null;
 let isConfigUpdate = false;
 
-sliderElement.noUiSlider.on('update', () => {
-  effectLevelInput.value = sliderElement.noUiSlider.get();
+slider.noUiSlider.on('update', () => {
+  effectLevelInput.value = slider.noUiSlider.get();
 
   const currentEffect = document.querySelector('input[name="effect"]:checked').value;
   if (isConfigUpdate) {
     return;
   }
 
-  function setFilterConfig () {
+  const setFilterConfig = () => {
     if (currentEffect !== prevEffect) {
       prevEffect = currentEffect;
       isConfigUpdate = true;
-      sliderElement.noUiSlider.updateOptions(CONFIGS[currentEffect]);
+      slider.noUiSlider.updateOptions(CONFIGS[currentEffect]);
     }
-  }
+  };
 
   switch (currentEffect) {
     case 'chrome':
@@ -59,13 +58,13 @@ sliderElement.noUiSlider.on('update', () => {
   isConfigUpdate = false;
 });
 
-function onEffectChange (evt) {
+const onEffectChange = (evt) => {
   if (evt.target.value === 'none') {
     sliderContainer.classList.add('hidden');
   } else {
     sliderContainer.classList.remove('hidden');
   }
-  sliderElement.noUiSlider.set(100);
-}
+  slider.noUiSlider.set(SCALE_VALUE);
+};
 
 effectsList.addEventListener('change', onEffectChange);

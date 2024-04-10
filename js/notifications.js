@@ -3,7 +3,7 @@ import {isEscapeKey} from './util.js';
 const body = document.body;
 const ERROR_SHOW_TIME = 5000;
 
-const closeNotification = (evt) => {
+const onCloseClick = (evt) => {
   evt.stopPropagation();
 
   const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
@@ -12,8 +12,8 @@ const closeNotification = (evt) => {
   if (closeBlock || isEscapeKey(evt) || !notificationBlock) {
     const notification = document.querySelector('.error') || document.querySelector('.success');
     notification.remove();
-    body.removeEventListener('click', closeNotification);
-    body.removeEventListener('keydown', closeNotification);
+    body.removeEventListener('click', onCloseClick);
+    body.removeEventListener('keydown', onCloseClick);
   }
 };
 
@@ -36,22 +36,20 @@ const showMessage = (message = null, notification, container) => {
     container.querySelector(notification).textContent = message;
   }
   body.append(container);
-  body.addEventListener('click', closeNotification);
-  body.addEventListener('keydown', closeNotification);
+  body.addEventListener('click', onCloseClick);
+  body.addEventListener('keydown', onCloseClick);
 };
 
 const showErrorMessage = () => showMessage(null, Notification.ERROR_MESSAGE, errorContainer);
 const showSuccessMessage = () => showMessage(null, Notification.SUCCESS_MESSAGE, successContainer);
-const showTypeFileError = (errMessage) => {
-  showMessage(errMessage, Notification.DATA_ERROR, dataError);
+
+const getErrorMessage = (message = null) => {
+  showMessage(message, Notification.DATA_ERROR, dataError);
   const dataErrorMessage = body.querySelector('.data-error');
   setTimeout(() => (dataErrorMessage.remove()), ERROR_SHOW_TIME);
 };
 
-const showGetDataError = () => {
-  showMessage(null, Notification.DATA_ERROR, dataError);
-  const dataErrorMessage = body.querySelector('.data-error');
-  setTimeout(() => (dataErrorMessage.remove()), ERROR_SHOW_TIME);
-};
+const showTypeFileError = (errMessage) => getErrorMessage(errMessage);
+const showGetDataError = (errMessage = null) => getErrorMessage(errMessage);
 
 export {showGetDataError, showErrorMessage, showSuccessMessage, showTypeFileError};
