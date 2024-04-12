@@ -8,7 +8,14 @@ const Notification = {
 };
 const body = document.body;
 
-const onCloseClick = (evt) => {
+const onPictureEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onCloseClick(evt);
+  }
+};
+
+function onCloseClick (evt) {
   evt.stopPropagation();
 
   const notificationBlock = evt.target.closest('.error__inner') || evt.target.closest('.success__inner');
@@ -18,9 +25,9 @@ const onCloseClick = (evt) => {
     const notification = document.querySelector('.error') || document.querySelector('.success');
     notification.remove();
     body.removeEventListener('click', onCloseClick);
-    body.removeEventListener('keydown', onCloseClick);
+    body.removeEventListener('keydown', onPictureEscKeydown);
   }
-};
+}
 
 const errorContainerTemplate = document.querySelector('#error').content;
 const successContainerTemplate = document.querySelector('#success').content;
@@ -36,7 +43,7 @@ const showMessage = (message = null, notification, container) => {
   }
   body.append(container);
   body.addEventListener('click', onCloseClick);
-  body.addEventListener('keydown', onCloseClick);
+  body.addEventListener('keydown', onPictureEscKeydown);
 };
 
 const showErrorMessage = () => showMessage(null, Notification.ERROR_MESSAGE, errorContainer);

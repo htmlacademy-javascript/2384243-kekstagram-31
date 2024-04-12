@@ -11,22 +11,26 @@ const imgPreview = document.querySelector('.img-upload__preview img');
 
 let scaleValue = null;
 
-buttonSmaller.addEventListener ('click', () => {
-  scaleValue = parseInt(scaleControlInput.value, 10);
+const addScaleListeners = () => {
+  buttonSmaller.addEventListener ('click', () => {
+    scaleValue = parseInt(scaleControlInput.value, 10);
 
-  if (scaleValue > SCALE_VALUE.min) {
-    scaleValue -= SCALE_STEP;
-    scaleControlInput.value = `${scaleValue}%`;
-    imgPreview.style.transform = `scale(${scaleValue / 100})`;
-  }
-});
+    if (scaleValue > SCALE_VALUE.min) {
+      scaleValue -= SCALE_STEP;
+      scaleControlInput.value = `${scaleValue}%`;
+      imgPreview.style.transform = `scale(${scaleValue / SCALE_VALUE.max})`;
+    }
+  });
 
-buttonBigger.addEventListener ('click', () => {
-  scaleValue = parseInt(scaleControlInput.value, 10);
+  buttonBigger.addEventListener ('click', () => {
+    scaleValue = parseInt(scaleControlInput.value, 10);
 
-  if (scaleValue < SCALE_VALUE.max) {
-    scaleValue += SCALE_STEP;
-    scaleControlInput.value = `${scaleValue}%`;
-    imgPreview.style.transform = `scale(${scaleValue / 100})`;
-  }
-});
+    if (scaleValue < SCALE_VALUE.max) {
+      scaleValue += SCALE_STEP;
+      scaleControlInput.value = `${scaleValue}%`;
+      imgPreview.style.transform = `scale(${scaleValue / SCALE_VALUE.max})`;
+    }
+  });
+};
+
+export {addScaleListeners};

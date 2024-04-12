@@ -10,7 +10,7 @@ const FILTER = {
 };
 
 const imgFilters = document.querySelector('.img-filters');
-const filtersButtons = imgFilters.querySelector('.img-filters__form');
+const filterButtons = imgFilters.querySelector('.img-filters__form');
 const activeButtonClass = 'img-filters__button--active';
 const inactiveClass = 'img-filters--inactive';
 
@@ -21,21 +21,23 @@ const clearUsersPictures = () => {
   pictures.forEach((picture) => picture.remove());
 };
 
-filtersButtons.addEventListener('click', (evt) => {
-  const currentButton = evt.target.closest('.img-filters__button');
-  const activeButtonElement = imgFilters.querySelector('.img-filters__button--active');
+const addFilterListener = () => {
+  filterButtons.addEventListener('click', (evt) => {
+    const currentButton = evt.target.closest('.img-filters__button');
+    const activeButtonElement = imgFilters.querySelector('.img-filters__button--active');
 
-  if (currentButton) {
-    evt.preventDefault();
-    activeButtonElement.classList.remove(activeButtonClass);
-    currentButton.classList.add(activeButtonClass);
-  }
+    if (currentButton) {
+      evt.preventDefault();
+      activeButtonElement.classList.remove(activeButtonClass);
+      currentButton.classList.add(activeButtonClass);
+    }
 
-  debounce (() => {
-    clearUsersPictures();
-    changeFilter ();
-  })();
-});
+    debounce (() => {
+      clearUsersPictures();
+      changeFilter ();
+    })();
+  });
+};
 
 function changeFilter () {
   const currentFilter = imgFilters.querySelector('.img-filters__button--active');
@@ -59,3 +61,5 @@ getData()
       usersPictures = posts;
     }
   });
+
+export {addFilterListener};

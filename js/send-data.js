@@ -14,18 +14,22 @@ const blockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.SENDING;
 };
 
-const unBlockSubmitButton = () => {
+const unblockSubmitButton = () => {
   submitButton.disabled = false;
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
+const addFormListener = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-  const isValid = pristine.validate();
-  if (isValid) {
-    blockSubmitButton();
-    sendData(new FormData(evt.target))
-      .finally(unBlockSubmitButton);
-  }
-});
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export {addFormListener};

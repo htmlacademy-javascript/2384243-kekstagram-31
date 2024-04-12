@@ -11,61 +11,42 @@ const sliderContainer = document.querySelector('.img-upload__effect-level');
 let prevEffect = null;
 let isConfigUpdate = false;
 
-slider.noUiSlider.on('update', () => {
-  effectLevelInput.value = slider.noUiSlider.get();
-
+window.addEventListener('load', () => {
   const currentEffect = document.querySelector('input[name="effect"]:checked').value;
+  if (currentEffect === 'none') {
+    sliderContainer.classList.add('hidden');
+  }
+});
+
+slider.noUiSlider.on('update', () => {
   if (isConfigUpdate) {
     return;
   }
-
+  const currentEffect = document.querySelector('input[name="effect"]:checked').value;
   const setFilterConfig = () => {
     if (currentEffect !== prevEffect) {
       prevEffect = currentEffect;
       isConfigUpdate = true;
-      slider.noUiSlider.updateOptions(CONFIGS[currentEffect]);
+      slider.noUiSlider.updateOptions(CONFIGS[currentEffect].options);
     }
   };
+  setFilterConfig();
 
-  switch (currentEffect) {
-    case 'chrome':
-      setFilterConfig();
-      imgPreview.style.filter = `grayscale(${effectLevelInput.value})`;
-      break;
-    case 'sepia':
-      setFilterConfig();
-      imgPreview.style.filter = `sepia(${effectLevelInput.value})`;
-      break;
-    case 'marvin':
-      setFilterConfig();
-      imgPreview.style.filter = `invert(${effectLevelInput.value}%)`;
-      break;
-    case 'phobos':
-      setFilterConfig();
-      imgPreview.style.filter = `blur(${effectLevelInput.value}px)`;
-      break;
-    case 'heat':
-      setFilterConfig();
-      imgPreview.style.filter = `brightness(${effectLevelInput.value})`;
-      break;
-    case 'none':
-      imgPreview.style.filter = 'none';
-      sliderContainer.classList.add('hidden');
-      break;
-    default:
-      imgPreview.style.filter = 'none';
-      break;
-  }
+  effectLevelInput.value = slider.noUiSlider.get();
+  imgPreview.style.filter = CONFIGS[currentEffect].getFilterValue(effectLevelInput.value);
+
   isConfigUpdate = false;
 });
 
-const onEffectChange = (evt) => {
-  if (evt.target.value === 'none') {
-    sliderContainer.classList.add('hidden');
-  } else {
-    sliderContainer.classList.remove('hidden');
-  }
-  slider.noUiSlider.set(SCALE_VALUE);
+const addEffectsListener = () => {
+  effectsList.addEventListener('change', (evt) => {
+    if (evt.target.value === 'none') {
+      sliderContainer.classList.add('hidden');
+    } else {
+      sliderContainer.classList.remove('hidden');
+    }
+    slider.noUiSlider.set(SCALE_VALUE);
+  });
 };
 
-effectsList.addEventListener('change', onEffectChange);
+export {addEffectsListener};
