@@ -61,9 +61,7 @@ const validateHashtag = (value) => {
 
 pristine.addValidator(hashtagInput, validateHashtag, () => hashtagErrorMessage);
 
-function validateDescription (value) {
-  return value.length >= COMMENTS_LENGTH.min && value.length <= COMMENTS_LENGTH.max;
-}
+const validateDescription = (value) => value.length >= COMMENTS_LENGTH.min && value.length <= COMMENTS_LENGTH.max;
 
 pristine.addValidator(descriptionInput, validateDescription, 'длина комментария больше 140 символов');
 

@@ -1,3 +1,66 @@
+const CONFIGS = {
+  chrome:{
+    options: {
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    },
+    getFilterValue: (value) => `grayscale(${value})`,
+  },
+
+  sepia:{
+    options: {
+      range: {
+        min: 0,
+        max: 1,
+      },
+      start: 1,
+      step: 0.1,
+    },
+    getFilterValue: (value) => `sepia(${value})`,
+  },
+  marvin:{
+    options: {
+      range: {
+        min: 0,
+        max: 100
+      },
+      start: 100,
+      step: 1,
+    },
+    getFilterValue: (value) => `invert(${value}%)`,
+  },
+  phobos: {
+    options: {
+      range: {
+        min: 0,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    },
+    getFilterValue: (value) => `blur(${value}px)`,
+  },
+  heat: {
+    options: {
+      range: {
+        min: 1,
+        max: 3,
+      },
+      start: 3,
+      step: 0.1,
+    },
+    getFilterValue: (value) => `brightness(${value})`,
+  },
+  none: {
+    options: '',
+    getFilterValue: () => '',
+  },
+};
+
 const sliderElement = document.querySelector('.effect-level__slider');
 
 noUiSlider.create(sliderElement, {
@@ -20,48 +83,5 @@ noUiSlider.create(sliderElement, {
     },
   },
 });
-
-const CONFIGS = {
-  chrome:{
-    range: {
-      min: 0,
-      max: 1
-    },
-    start: 1,
-    step: 0.1
-  },
-  sepia:{
-    range: {
-      min: 0,
-      max: 1
-    },
-    start: 1,
-    step: 0.1
-  },
-  marvin:{
-    range: {
-      min: 0,
-      max: 100
-    },
-    start: 100,
-    step: 1
-  },
-  phobos: {
-    range: {
-      min: 0,
-      max: 3
-    },
-    start: 3,
-    step: 0.1
-  },
-  heat: {
-    range: {
-      min: 1,
-      max: 3
-    },
-    start: 3,
-    step: 0.1
-  }
-};
 
 export {CONFIGS};

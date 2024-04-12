@@ -5,10 +5,21 @@ const templateUserPicture = document.querySelector('#picture')
   .querySelector('.picture');
 
 const containerUsersPictures = document.querySelector('.pictures');
+let photos = null;
+
+containerUsersPictures.addEventListener('click', (evt) => {
+  const picture = evt.target.closest('.picture');
+
+  if(picture){
+    evt.preventDefault();
+    const currentPicture = photos.find((item) => picture.dataset.id === item.id.toString());
+    openBigPicture(currentPicture);
+  }
+});
 
 const createPosts = (usersPictures) => {
   const usersPicturesFragment = document.createDocumentFragment();
-
+  photos = usersPictures;
   usersPictures
     .forEach(({url, description, likes, comments, id}) => {
       const userPicture = templateUserPicture.cloneNode(true);
@@ -23,16 +34,6 @@ const createPosts = (usersPictures) => {
     });
 
   containerUsersPictures.appendChild(usersPicturesFragment);
-
-  containerUsersPictures.addEventListener('click', (evt) => {
-    const picture = evt.target.closest('.picture');
-
-    if(picture){
-      evt.preventDefault();
-      const currentPicture = usersPictures.find((item) => picture.dataset.id === item.id.toString());
-      openBigPicture(currentPicture);
-    }
-  });
 };
 
 export {createPosts};
